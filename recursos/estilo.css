@@ -1,0 +1,135 @@
+/*
+ * CDISC Learning · Estilo "Mosaico"
+ * Violeta, magenta y naranja. Títulos en Poppins, texto en Inter, código en JetBrains Mono.
+ *
+ * Uso: en el <head> de cada página
+ *   lecciones/xx.html     → <link rel="stylesheet" href="../recursos/estilo.css">
+ *   lecciones/en/xx.html  → <link rel="stylesheet" href="../../recursos/estilo.css">
+ *
+ * Variables disponibles (cambian solas entre tema claro y oscuro):
+ *   Superficies: --bg --surface --soft --line
+ *   Texto:       --ink --muted
+ *   Marca:       --primary --on-primary --accent --on-accent --sun
+ *   Respuestas:  --ok --ok-bg --no --no-bg
+ *   Roles SDTM:  --id --topic --timing --qual --rule (texto) y --id-bg ... --rule-bg (fondo)
+ *   Tipografía:  --display --body --mono      Esquinas: --radius
+ *
+ * Clases útiles:
+ *   .cdisc-prosa  → estilo completo para lecciones sencillas (títulos, tablas, listas…)
+ *   .r-id .r-topic .r-timing .r-qual .r-rule  → fijan --c y --cb al color del rol
+ */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Poppins:wght@600;700&display=swap");
+
+:root {
+  --display: "Poppins", "Segoe UI", system-ui, sans-serif;
+  --body: "Inter", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+  --radius: 14px;
+
+  --bg: #FAF7FF; --surface: #FFFFFF; --soft: #F1EBFC; --line: #E2D9F3;
+  --ink: #1E1433; --muted: #5B5270;
+  --primary: #6D28D9; --on-primary: #FFFFFF;
+  --accent: #C2185B; --on-accent: #FFFFFF;
+  --sun: #F97316;
+  --ok: #047857; --ok-bg: #D7F6E9; --no: #B91C1C; --no-bg: #FDE2E2;
+
+  --id: #1D4ED8;     --id-bg: #E0EAFF;
+  --topic: #A3154F;  --topic-bg: #FCE4F1;
+  --timing: #9A4A06; --timing-bg: #FEEFD6;
+  --qual: #03684C;   --qual-bg: #D7F6E9;
+  --rule: #5B21B6;   --rule-bg: #EDE4FF;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #140F22; --surface: #1E1730; --soft: #271E3D; --line: #352B4D;
+    --ink: #F0EAFB; --muted: #ABA2C2;
+    --primary: #A78BFA; --on-primary: #1A0B3D;
+    --accent: #F472B6; --on-accent: #3B0A22;
+    --sun: #FB923C;
+    --ok: #6EE7B7; --ok-bg: #0F3A2C; --no: #FCA5A5; --no-bg: #4A1818;
+    --id: #93B4FF;     --id-bg: #1C2A55;
+    --topic: #F9A8D4;  --topic-bg: #4C1733;
+    --timing: #FDBA74; --timing-bg: #46290F;
+    --qual: #6EE7B7;   --qual-bg: #0F3A2C;
+    --rule: #C4B5FD;   --rule-bg: #2E2156;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #140F22; --surface: #1E1730; --soft: #271E3D; --line: #352B4D;
+  --ink: #F0EAFB; --muted: #ABA2C2;
+  --primary: #A78BFA; --on-primary: #1A0B3D;
+  --accent: #F472B6; --on-accent: #3B0A22;
+  --sun: #FB923C;
+  --ok: #6EE7B7; --ok-bg: #0F3A2C; --no: #FCA5A5; --no-bg: #4A1818;
+  --id: #93B4FF;     --id-bg: #1C2A55;
+  --topic: #F9A8D4;  --topic-bg: #4C1733;
+  --timing: #FDBA74; --timing-bg: #46290F;
+  --qual: #6EE7B7;   --qual-bg: #0F3A2C;
+  --rule: #C4B5FD;   --rule-bg: #2E2156;
+  color-scheme: dark;
+}
+
+/* ---------- Base común ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 400 17px/1.6 var(--body);
+}
+/* Banda de color característica en la parte superior */
+body::before {
+  content: "";
+  display: block;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary), var(--accent), var(--sun));
+}
+h1, h2, h3 { font-family: var(--display); line-height: 1.2; text-wrap: balance; }
+a { color: var(--primary); }
+code, kbd, samp { font-family: var(--mono); font-size: .9em; }
+::selection { background: var(--accent); color: var(--on-accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+.r-id     { --c: var(--id);     --cb: var(--id-bg); }
+.r-topic  { --c: var(--topic);  --cb: var(--topic-bg); }
+.r-timing { --c: var(--timing); --cb: var(--timing-bg); }
+.r-qual   { --c: var(--qual);   --cb: var(--qual-bg); }
+.r-rule   { --c: var(--rule);   --cb: var(--rule-bg); }
+
+/* ---------- .cdisc-prosa: lecciones sencillas ---------- */
+.cdisc-prosa {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 24px max(16px, env(safe-area-inset-right, 0px)) 64px max(16px, env(safe-area-inset-left, 0px));
+}
+.cdisc-prosa h1 { font-size: clamp(30px, 6vw, 42px); margin: 8px 0 16px; }
+.cdisc-prosa h2 { font-size: 26px; margin: 40px 0 12px; }
+.cdisc-prosa h3 { font-size: 19px; margin: 28px 0 8px; }
+.cdisc-prosa p, .cdisc-prosa li { max-width: 68ch; }
+.cdisc-prosa .volver {
+  display: inline-block; font-size: 14px; text-decoration: none; color: var(--ink);
+  border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 4px 12px;
+}
+.cdisc-prosa .volver:hover { border-color: var(--primary); color: var(--primary); }
+.cdisc-prosa table {
+  border-collapse: collapse; width: 100%; background: var(--surface);
+  border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden;
+}
+.cdisc-prosa th, .cdisc-prosa td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.cdisc-prosa tr:last-child td { border-bottom: 0; }
+.cdisc-prosa th { background: var(--soft); font-weight: 600; }
+.cdisc-prosa td:first-child { font-family: var(--mono); font-weight: 600; color: var(--primary); white-space: nowrap; }
+.cdisc-prosa .nota {
+  border-left: 5px solid var(--accent); background: var(--surface);
+  border-radius: 0 var(--radius) var(--radius) 0; padding: 14px 18px;
+}
+.cdisc-prosa .flujo { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 0; margin: 0; list-style: none; }
+.cdisc-prosa .flujo li {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 999px;
+  padding: 6px 14px; font-weight: 600;
+}
+.cdisc-prosa .flujo li:nth-child(4n+1) { color: var(--primary); }
+.cdisc-prosa .flujo li:nth-child(4n+3) { color: var(--accent); }
+.cdisc-prosa .flujo li.flecha { background: none; border: 0; padding: 0; color: var(--muted); }

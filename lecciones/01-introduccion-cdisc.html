@@ -4,28 +4,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Introducción a CDISC</title>
+  <link rel="stylesheet" href="../recursos/estilo.css">
   <script src="../recursos/controles.js"></script>
-  <style>
-    :root { --bg: #ffffff; --text: #1d2330; --line: #d9dee7; --accent: #1f6feb; }
-    @media (prefers-color-scheme: dark) {
-      :root:not([data-theme="light"]) { --bg: #12151c; --text: #e7eaf0; --line: #2f3744; --accent: #5a9cff; color-scheme: dark; }
-    }
-    :root[data-theme="dark"] { --bg: #12151c; --text: #e7eaf0; --line: #2f3744; --accent: #5a9cff; color-scheme: dark; }
-    body { max-width: 760px; margin: 0 auto; padding: 24px 16px 40px;
-           font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-           color: var(--text); background: var(--bg); }
-    h1 { margin-top: 0; }
-    table { border-collapse: collapse; width: 100%; }
-    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-    a { color: var(--accent); }
-  </style>
 </head>
 <body>
-  <p><a href="../">← Volver al índice</a></p>
+<main class="cdisc-prosa">
+  <a class="volver" href="../">← Índice</a>
   <h1>Introducción a CDISC</h1>
   <p><strong>CDISC</strong> (Clinical Data Interchange Standards Consortium) es una organización sin ánimo de lucro
-  que desarrolla estándares para recoger, organizar, analizar e intercambiar datos de investigación clínica.
-  Las agencias reguladoras como la FDA (EE. UU.) y la PMDA (Japón) exigen datos en formato CDISC en los envíos.</p>
+  que desarrolla estándares para recoger, organizar, analizar e intercambiar datos de investigación clínica.</p>
+  <p class="nota">Las agencias reguladoras como la FDA (EE. UU.) y la PMDA (Japón) exigen datos en formato CDISC en los envíos.</p>
 
   <h2>Principales estándares</h2>
   <table>
@@ -35,11 +23,14 @@
     <tr><td>ADaM</td><td>Define los conjuntos de datos de análisis (ADSL, BDS, OCCDS…).</td></tr>
     <tr><td>SEND</td><td>Aplicación de SDTM a estudios no clínicos.</td></tr>
     <tr><td>Define-XML</td><td>Metadatos que describen los conjuntos de datos enviados.</td></tr>
-    <tr><td>Terminología controlada (CT)</td><td>Listas de valores permitidos, mantenidas junto con el NCI EVS.</td></tr>
+    <tr><td>CT</td><td>Terminología controlada: listas de valores permitidos, mantenidas junto con el NCI EVS.</td></tr>
   </table>
 
   <h2>Flujo típico de los datos</h2>
-  <p>CRF (CDASH) → datos tabulados (SDTM) → datos de análisis (ADaM) → tablas, listados y figuras,
-  todo ello documentado con Define-XML.</p>
+  <ul class="flujo">
+    <li>CRF · CDASH</li><li class="flecha" aria-hidden="true">→</li><li>Datos tabulados · SDTM</li><li class="flecha" aria-hidden="true">→</li><li>Datos de análisis · ADaM</li><li class="flecha" aria-hidden="true">→</li><li>Tablas, listados y figuras</li>
+  </ul>
+  <p style="margin-top:16px">Todo ello se documenta con Define-XML.</p>
+</main>
 </body>
 </html>

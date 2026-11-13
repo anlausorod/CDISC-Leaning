@@ -10,6 +10,7 @@ Material didáctico en HTML sobre los estándares CDISC, publicado como sitio we
 index.html              → página de inicio (lista las lecciones automáticamente)
 lecciones/              → lecciones en español
 lecciones/en/           → versión en inglés (mismo nombre de archivo que en español)
+recursos/estilo.css     → estilo común "Mosaico" (colores, tipografía, tema claro/oscuro)
 recursos/controles.js   → botones de idioma (ES/EN) y tema (claro/oscuro)
 guia-de-estilo.html     → propuestas de estilo visual para las lecciones
 .nojekyll               → indica a GitHub Pages que sirva los archivos tal cual
@@ -22,16 +23,22 @@ guia-de-estilo.html     → propuestas de estilo visual para las lecciones
    El índice mostrará el título "Sdtm dominios".
 3. En un par de minutos aparecerá en el sitio.
 
-### Botones de idioma y tema
+### Estilo, idioma y tema
 
-Añade esta línea dentro del `<head>` de cada lección:
+Añade estas dos líneas dentro del `<head>` de cada lección:
 
 ```html
 <!-- en lecciones/ -->
+<link rel="stylesheet" href="../recursos/estilo.css">
 <script src="../recursos/controles.js"></script>
 <!-- en lecciones/en/ -->
+<link rel="stylesheet" href="../../recursos/estilo.css">
 <script src="../../recursos/controles.js"></script>
 ```
+
+- **Estilo:** `estilo.css` aplica los colores y la tipografía "Mosaico" y define variables
+  (`--primary`, `--accent`, `--topic`…) que cambian solas entre claro y oscuro. Para una lección
+  sencilla basta con envolver el contenido en `<main class="cdisc-prosa">`. Ver `guia-de-estilo.html`.
 
 - **Idioma:** la versión inglesa de `lecciones/02-x.html` debe llamarse igual y estar en
   `lecciones/en/02-x.html`. Si no existe, el botón aparece desactivado.
