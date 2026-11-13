@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDTM 2.1 Concepts and terms</title>
+<script src="../../recursos/controles.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Sora:wght@600;700&display=swap">
+<style>
+/* Layout: one reading column; each concept is explained and then explored in a real data table. Colour only encodes the variable Role. */
+:root{
+  --bg:#F2F5F8;--surface:#FFFFFF;--ink:#14232E;--muted:#556572;--line:#D3DCE4;--soft:#E8EDF2;
+  --id:#2459BF;--id-bg:#E2EBFB;--topic:#B8284F;--topic-bg:#FBE4EA;--timing:#8A5A00;--timing-bg:#FBEFD2;
+  --qual:#1F7446;--qual-bg:#DDF3E6;--rule:#6A3FB5;--rule-bg:#ECE4FA;
+  --display:"Sora","Segoe UI",system-ui,sans-serif;--body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;--mono:"IBM Plex Mono",Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F171D;--surface:#172129;--ink:#E6EDF2;--muted:#9BABB8;--line:#2C3A46;--soft:#1F2B35;
+  --id:#86AEF7;--id-bg:#1B2D4D;--topic:#F58BA8;--topic-bg:#4A1C2A;--timing:#EBBB5A;--timing-bg:#43330F;
+  --qual:#72D197;--qual-bg:#173A27;--rule:#BDA4F5;--rule-bg:#30224F;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F171D;--surface:#172129;--ink:#E6EDF2;--muted:#9BABB8;--line:#2C3A46;--soft:#1F2B35;
+  --id:#86AEF7;--id-bg:#1B2D4D;--topic:#F58BA8;--topic-bg:#4A1C2A;--timing:#EBBB5A;--timing-bg:#43330F;
+  --qual:#72D197;--qual-bg:#173A27;--rule:#BDA4F5;--rule-bg:#30224F;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body)}
+main{max-width:860px;margin:0 auto;padding-block:40px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:56px}
+section{display:flex;flex-direction:column;gap:16px;min-width:0}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:clamp(30px,6vw,44px)}h2{font-size:26px}h3{font-size:17px}
+p{margin:0;max-width:66ch}
+.eyebrow{font:600 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lead{font-size:19px;color:var(--muted)}
+code,.v{font-family:var(--mono);font-size:.9em;font-weight:500}
+nav{display:flex;flex-wrap:wrap;gap:8px}
+nav a{font-size:14px;color:var(--ink);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;background:var(--surface)}
+nav a:hover{border-color:var(--ink)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--id);outline-offset:2px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;font:500 14px var(--mono);width:100%}
+th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;white-space:nowrap}
+th{background:var(--soft);font-weight:600}
+td small,th small{display:block;font:400 11px var(--body);color:var(--muted);letter-spacing:.02em}
+/* roles */
+.r-id{--c:var(--id);--cb:var(--id-bg)}.r-topic{--c:var(--topic);--cb:var(--topic-bg)}.r-timing{--c:var(--timing);--cb:var(--timing-bg)}.r-qual{--c:var(--qual);--cb:var(--qual-bg)}.r-rule{--c:var(--rule);--cb:var(--rule-bg)}
+.tag{display:inline-block;font:600 12px var(--mono);color:var(--c);background:var(--cb);border-radius:4px;padding:2px 8px}
+/* tres equivalencias */
+.eq{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.eq div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:4px}
+.eq b{font-family:var(--display);font-size:18px}.eq span{font-size:14px;color:var(--muted)}
+.eq i{font:500 13px var(--mono);font-style:normal}
+/* anatomía */
+.sentence{font-family:var(--display);font-size:clamp(19px,3.6vw,25px);line-height:1.9}
+.seg,.cellbtn{font:inherit;color:var(--c);background:var(--cb);border:2px solid transparent;border-radius:6px;padding:1px 8px;cursor:pointer}
+.seg.on{border-color:var(--c)}
+td.on,th.on{background:var(--cb);color:var(--c);box-shadow:inset 0 0 0 2px var(--c)}
+td[data-k],th[data-k]{cursor:pointer}
+.explain{border-left:4px solid var(--c);background:var(--cb);border-radius:0 8px 8px 0;padding:12px 16px;font-size:16px}
+.explain b{color:var(--c)}
+.hint{font-size:14px;color:var(--muted)}
+/* tarjetas de rol */
+.roles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.role{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--c);border-radius:6px;padding:16px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.role h3{color:var(--c)}.role .q{font-style:italic;color:var(--muted)}
+/* pestañas */
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabs button,.pick button{font:500 14px var(--body);color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--qual);border-color:var(--qual);color:var(--surface)}
+.pick button{font-family:var(--mono);font-weight:600}
+.pick button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+td.q-on,th.q-on{background:var(--qual-bg);color:var(--qual);box-shadow:inset 0 0 0 2px var(--qual)}
+td.q-ref,th.q-ref{box-shadow:inset 0 0 0 2px var(--muted)}
+.uses{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.uses div{border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:4px;background:var(--bg)}
+.uses span{font-size:13px;color:var(--muted)}.uses b{font:600 18px var(--mono)}
+.uses em{font:500 13px var(--mono);font-style:normal;color:var(--muted)}
+.pick{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+/* define */
+.meta td:first-child{font-family:var(--body);font-weight:600}.meta td{white-space:normal;vertical-align:top}
+.meta td:nth-child(3){font-family:var(--body);font-weight:400;color:var(--muted);min-width:220px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.two>div{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.rules{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.rules li{display:grid;grid-template-columns:110px 1fr;gap:12px;align-items:baseline;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 16px;font-size:16px}
+.ok,.no{font:600 12px var(--mono);letter-spacing:.06em;text-transform:uppercase;border-radius:4px;padding:2px 8px;text-align:center}
+.ok{color:var(--qual);background:var(--qual-bg)}.no{color:var(--topic);background:var(--topic-bg)}
+/* quiz */
+.quiz{display:flex;flex-direction:column;gap:16px}
+.qz{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.qz p{font-weight:600}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts button{font:500 14px var(--body);color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer;text-align:left}
+.opts button.right{background:var(--qual-bg);border-color:var(--qual);color:var(--qual)}
+.opts button.wrong{background:var(--topic-bg);border-color:var(--topic);color:var(--topic)}
+.fb{font-size:15px;color:var(--muted);min-height:1.6em}
+.score{font:600 15px var(--mono)}
+footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+@media (max-width:520px){.rules li{grid-template-columns:1fr}.ok,.no{justify-self:start}}
+</style>
+</head>
+<body>
+<main>
+
+<section>
+  <span class="eyebrow">CDISC SDTM v1.3 · Section 2.1</span>
+  <h1>Model concepts and terms</h1>
+  <p class="lead">SDTM is a general framework for organizing the information collected in a study and submitted to regulatory authorities. The whole model rests on three ideas: observation, variable and domain.</p>
+  <nav aria-label="Contents">
+    <a href="../../">← Index</a><a href="#bases">The three ideas</a><a href="#anatomia">Anatomy of an observation</a><a href="#roles">The 5 roles</a><a href="#calificadores">The 5 qualifiers</a><a href="#dominio">The domain code</a><a href="#define">Metadata and define.xml</a><a href="#reglas">Sponsor rules</a><a href="#quiz">Check your knowledge</a>
+  </nav>
+</section>
+
+<section id="bases">
+  <h2>The three core ideas</h2>
+  <p>An SDTM dataset is a flat file, like a spreadsheet. Each concept of the model has an exact place in that table.</p>
+  <div class="eq">
+    <div><b>Observation</b><i>= a row</i><span>A discrete piece of information collected during the study.</span></div>
+    <div><b>Variable</b><i>= a column</i><span>A named value that describes the observation. Every variable has a Role.</span></div>
+    <div><b>Domain</b><i>= a dataset</i><span>Logically related observations that share a topic, for example adverse events.</span></div>
+  </div>
+</section>
+
+<section id="anatomia">
+  <h2>Anatomy of an observation</h2>
+  <p>The standard uses this sentence as an example. It belongs to the Adverse Events (AE) domain. Click each part of the sentence, or each column, to see which variable stores it and which role it plays.</p>
+  <div class="panel">
+    <div class="sentence" id="sentence">
+      <button class="seg r-id" data-k="USUBJID">Subject 101</button> had
+      <button class="seg r-qual" data-k="AESEV">mild</button>
+      <button class="seg r-topic" data-k="AETERM">nausea</button>
+      <button class="seg r-timing" data-k="AESTDY">starting on Study Day 6</button>
+    </div>
+    <div class="scroll">
+      <table id="aeTable" aria-label="The observation as a row of the AE dataset">
+        <tr><th data-k="DOMAIN">DOMAIN</th><th data-k="USUBJID">USUBJID</th><th data-k="AESEQ">AESEQ</th><th data-k="AETERM">AETERM</th><th data-k="AESEV">AESEV</th><th data-k="AESTDY">AESTDY</th></tr>
+        <tr><td data-k="DOMAIN">AE</td><td data-k="USUBJID">101</td><td data-k="AESEQ">1</td><td data-k="AETERM">NAUSEA</td><td data-k="AESEV">MILD</td><td data-k="AESTDY">6</td></tr>
+      </table>
+    </div>
+    <div class="explain" id="explain" aria-live="polite"></div>
+    <span class="hint">DOMAIN and AESEQ do not appear in the sentence, but the row needs them to be identified. More timing variables and qualifiers can be added when more detail is needed.</span>
+  </div>
+</section>
+
+<section id="roles">
+  <h2>The 5 roles of a variable</h2>
+  <p>The Role states what kind of information the variable conveys about each observation and how it can be used. Each role answers a different question.</p>
+  <div class="roles">
+    <div class="role r-id"><h3>Identifier</h3><span class="q">Whose record is it, and which one?</span><span>Identifies the study, the subject (a person, an animal or a group), the domain and the sequence number of the record.</span><span><span class="tag">USUBJID</span> <span class="tag">DOMAIN</span> <span class="tag">--SEQ</span></span></div>
+    <div class="role r-topic"><h3>Topic</h3><span class="q">What is the observation about?</span><span>Specifies the focus of the observation, such as the name of a lab test or the adverse event term.</span><span><span class="tag">--TERM</span> <span class="tag">--TRT</span> <span class="tag">--TESTCD</span></span></div>
+    <div class="role r-timing"><h3>Timing</h3><span class="q">When did it happen?</span><span>Describes the timing of the observation, such as start date and end date.</span><span><span class="tag">AESTDY</span></span></div>
+    <div class="role r-qual"><h3>Qualifier</h3><span class="q">What else do we know about it?</span><span>Text or numeric values that describe the results or additional traits, such as units or descriptive adjectives. It is divided into 5 subclasses.</span><span><span class="tag">AESEV</span> <span class="tag">--ORRESU</span></span></div>
+    <div class="role r-rule"><h3>Rule</h3><span class="q">Under what condition does it start, end or repeat?</span><span>Expresses an algorithm or executable method to define start, end or looping conditions. Used only in the Trial Design model.</span></div>
+  </div>
+</section>
+
+<section id="calificadores">
+  <h2>The 5 qualifier subclasses</h2>
+  <p>Pick a subclass to see its definition and which columns of this lab record (serum glucose) belong to it. The two hyphens in <code>--ORRES</code> are replaced with the domain code: in LB it is <code>LBORRES</code>.</p>
+  <div class="panel">
+    <div class="tabs" id="qtabs" role="group" aria-label="Qualifier subclasses"></div>
+    <div><h3 id="qtitle"></h3><p id="qdesc"></p></div>
+    <p class="hint" id="qex"></p>
+    <div class="scroll">
+      <table id="lbTable" aria-label="Example record from the LB domain">
+        <tr><th data-v="LBTESTCD">LBTESTCD<small>Topic</small></th><th data-v="LBTEST">LBTEST</th><th data-v="LBCAT">LBCAT</th><th data-v="LBORRES">LBORRES</th><th data-v="LBORRESU">LBORRESU</th><th data-v="LBORNRLO">LBORNRLO</th><th data-v="LBORNRHI">LBORNRHI</th><th data-v="LBSPEC">LBSPEC</th><th data-v="LBBLFL">LBBLFL</th></tr>
+        <tr><td data-v="LBTESTCD">GLUC</td><td data-v="LBTEST">Glucose</td><td data-v="LBCAT">CHEMISTRY</td><td data-v="LBORRES">98</td><td data-v="LBORRESU">mg/dL</td><td data-v="LBORNRLO">70</td><td data-v="LBORNRHI">99</td><td data-v="LBSPEC">SERUM</td><td data-v="LBBLFL">Y</td></tr>
+      </table>
+    </div>
+    <span class="hint">Green: variables in the selected subclass. Grey border: the variable they refer to. Values are illustrative.</span>
+  </div>
+</section>
+
+<section id="dominio">
+  <h2>The domain code and its four uses</h2>
+  <p>Each domain is identified by a unique two-character code that must be used consistently throughout the submission. That code appears in four places. Switch domains to see it.</p>
+  <div class="panel">
+    <div class="pick" id="dpick" role="group" aria-label="Domain"><span class="hint">Domain:</span></div>
+    <span class="hint" id="dname"></span>
+    <div class="uses">
+      <div><span>1. Dataset name</span><b id="u1"></b></div>
+      <div><span>2. Value of the DOMAIN variable</span><b id="u2"></b></div>
+      <div><span>3. Prefix of most variable names</span><b id="u3"></b><em id="u3b"></em></div>
+      <div><span>4. Value of RDOMAIN in relationship tables</span><b id="u4"></b></div>
+    </div>
+    <span class="hint">Domain names are common examples from the implementation guides.</span>
+  </div>
+</section>
+
+<section id="define">
+  <h2>Metadata: the define.xml document</h2>
+  <p>Every dataset is submitted with a data definition document called “define”, which describes its variables. Define.xml uses seven attributes per variable. Here they are applied to <code>AETERM</code>.</p>
+  <div class="panel scroll">
+    <table class="meta" aria-label="The seven metadata attributes">
+      <tr><th>Attribute</th><th>Example</th><th>What the model requires</th></tr>
+      <tr><td>Name</td><td>AETERM</td><td>Up to 8 characters, for compatibility with the SAS Transport format.</td></tr>
+      <tr><td>Label</td><td>Reported Term for the Adverse Event</td><td>Descriptive, up to 40 characters and unique within the dataset.</td></tr>
+      <tr><td>Type</td><td>Char</td><td>Character or numeric only (a SAS v5 transport limitation).</td></tr>
+      <tr><td>Controlled terms or format</td><td>—</td><td>The controlled terminology for the values, or their display format.</td></tr>
+      <tr><td>Origin</td><td>CRF</td><td>Where the variable comes from. Uses CDISC controlled terminology.</td></tr>
+      <tr><td>Role</td><td><span class="tag r-topic">Topic</span></td><td>How the variable is used: Identifier, Topic, Timing or one of the five qualifiers.</td></tr>
+      <tr><td>Comments</td><td>Free text</td><td>Anything the sponsor needs to explain to the agency about the variable or its data.</td></tr>
+    </table>
+  </div>
+  <div class="two">
+    <div><h3>Raw and derived data</h3><span>Variables hold raw values, as captured by whoever provided the data, and derived values, such as a conversion to standard units or a calculated age.</span></div>
+    <div><h3>What SDTM fixes and what comes later</h3><span>SDTM defines the name, label, role and type of the standard variables. More descriptive data types (integer, float, date, datetime) are expected in the future, once the SAS v5 requirement changes.</span></div>
+  </div>
+</section>
+
+<section id="reglas">
+  <h2>Rules for the sponsor</h2>
+  <p>When preparing a submission, the sponsor has very limited latitude over the variables.</p>
+  <ul class="rules">
+    <li><span class="ok">Allowed</span><span>Omit variables defined as <em>permissible</em> in the implementation guide, and their description in define.xml, as long as no data were collected for them.</span></li>
+    <li><span class="no">Not allowed</span><span>Add new sponsor-defined variables.</span></li>
+    <li><span class="no">Not allowed</span><span>Rename existing variables or modify them for a different use.</span></li>
+    <li><span class="ok">Check</span><span>The relevant implementation guide states which variables are required, expected or permissible in each domain.</span></li>
+  </ul>
+</section>
+
+<section id="quiz">
+  <h2>Check your knowledge</h2>
+  <div class="quiz" id="quizBox"></div>
+  <span class="score" id="score" aria-live="polite"></span>
+</section>
+
+<footer>Study material based on section 2.1 “Model Concepts and Terms” of the Study Data Tabulation Model v1.3 (CDISC, 2012). The LB examples, domain names and define.xml values are illustrative.</footer>
+</main>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+
+/* Anatomy */
+const AE={
+ DOMAIN:{r:'id',rol:'Identifier',t:'Stores the two-character domain code. Every row in this dataset has “AE”.'},
+ USUBJID:{r:'id',rol:'Identifier',t:'“Subject 101” identifies whom the observation belongs to. The value 101 is stored.'},
+ AESEQ:{r:'id',rol:'Identifier',t:'The sequence number distinguishes this record from the subject’s other records in the domain.'},
+ AETERM:{r:'topic',rol:'Topic',t:'“Nausea” is the focus of the observation: the adverse event term. NAUSEA is stored.'},
+ AESEV:{r:'qual',rol:'Record qualifier',t:'“Mild” is the severity. It describes the record as a whole. MILD is stored.'},
+ AESTDY:{r:'timing',rol:'Timing',t:'“Starting on Study Day 6” is the study day on which the event began. 6 is stored.'}
+};
+function showAE(k){
+  const d=AE[k];
+  $$('#sentence .seg').forEach(b=>b.classList.toggle('on',b.dataset.k===k));
+  $$('#aeTable [data-k]').forEach(c=>{c.className=c.dataset.k===k?'on r-'+d.r:''});
+  const e=$('#explain');e.className='explain r-'+d.r;
+  e.innerHTML='<b>'+k+' · '+d.rol+'</b><br>'+d.t;
+}
+$$('#sentence .seg, #aeTable [data-k]').forEach(el=>el.addEventListener('click',()=>showAE(el.dataset.k)));
+showAE('AETERM');
+
+/* Qualifiers */
+const Q=[
+ {n:'Result',d:'Describe the specific result associated with the topic variable in a Findings dataset. They answer the question raised by the topic.',ex:'Variables: --ORRES, --STRESC and --STRESN.',on:['LBORRES'],ref:['LBTESTCD']},
+ {n:'Grouping',d:'Group a set of observations within the same domain.',ex:'Examples: --CAT and --SCAT.',on:['LBCAT'],ref:[]},
+ {n:'Synonym',d:'Provide an alternative name for a particular variable in the observation.',ex:'Examples: --MODIFY and --DECOD are equivalent to --TRT or --TERM; --TEST and --LOINC are equivalent to --TESTCD.',on:['LBTEST'],ref:['LBTESTCD']},
+ {n:'Record',d:'Define attributes of the record as a whole, not of a particular variable within it.',ex:'Examples: --REASND and AESLIFE in AE; AGE, SEX and RACE in DM; --BLFL, --POS, --LOC, --SPEC and --NAM in Findings.',on:['LBSPEC','LBBLFL'],ref:[]},
+ {n:'Variable',d:'Further modify or describe a specific variable and only make sense together with it.',ex:'Examples: --ORRESU, --ORNRHI and --ORNRLO qualify --ORRES; --DOSU qualifies --DOSE.',on:['LBORRESU','LBORNRLO','LBORNRHI'],ref:['LBORRES']}
+];
+function showQ(i){
+  const q=Q[i];
+  $$('#qtabs button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));
+  $('#qtitle').textContent=q.n+' qualifier';
+  $('#qdesc').textContent=q.d;$('#qex').textContent=q.ex;
+  $$('#lbTable [data-v]').forEach(c=>{c.classList.toggle('q-on',q.on.includes(c.dataset.v));c.classList.toggle('q-ref',q.ref.includes(c.dataset.v))});
+}
+Q.forEach((q,i)=>{const b=document.createElement('button');b.type='button';b.textContent=q.n;b.onclick=()=>showQ(i);$('#qtabs').append(b)});
+showQ(0);
+
+/* Domain */
+const D=[['AE','Adverse Events','TERM'],['CM','Concomitant Medications','TRT'],['LB','Laboratory Test Results','TESTCD'],['VS','Vital Signs','TESTCD']];
+function showD(i){
+  const [c,n,t]=D[i];
+  $$('#dpick button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));
+  $('#dname').textContent=c+' = '+n;
+  $('#u1').textContent=c.toLowerCase();$('#u2').textContent='"'+c+'"';$('#u4').textContent='"'+c+'"';
+  $('#u3').textContent=c+'SEQ · '+c+t;$('#u3b').textContent='--SEQ · --'+t;
+}
+D.forEach((d,i)=>{const b=document.createElement('button');b.type='button';b.textContent=d[0];b.onclick=()=>showD(i);$('#dpick').append(b)});
+showD(0);
+
+/* Quiz */
+const QZ=[
+ ['In an SDTM dataset, what does an observation usually correspond to?',['A column','A row','A whole domain'],1,'Observations are rows; variables are columns.'],
+ ['In the nausea example, what role does the value MILD have?',['Topic','Timing','Record qualifier'],2,'Severity describes the record as a whole: it is a record qualifier.'],
+ ['--ORRESU (the units) is a…',['variable qualifier, because it qualifies --ORRES','result qualifier','grouping qualifier'],0,'Units only make sense together with the result they qualify.'],
+ ['Which of these is NOT one of the four uses of the domain code?',['Dataset name','Variable name prefix','Variable label'],2,'The four uses are: dataset name, DOMAIN value, variable prefix and RDOMAIN value.'],
+ ['What is the maximum length of a variable name?',['8 characters','40 characters','200 characters'],0,'8 characters for the name; 40 is the limit for the label.'],
+ ['Can the sponsor add its own variable to a domain?',['Yes, if it is documented in define.xml','No, never','Only if it is numeric'],1,'New variables cannot be added, and existing ones cannot be renamed or repurposed.']
+];
+let good=0,done=0;
+QZ.forEach(([q,o,a,why],i)=>{
+  const box=document.createElement('div');box.className='qz';
+  box.innerHTML='<p>'+(i+1)+'. '+q+'</p><div class="opts"></div><div class="fb"></div>';
+  o.forEach((txt,j)=>{
+    const b=document.createElement('button');b.type='button';b.textContent=txt;
+    b.onclick=()=>{
+      if(box.dataset.done)return;box.dataset.done=1;done++;
+      const ok=j===a;if(ok)good++;
+      b.classList.add(ok?'right':'wrong');box.querySelectorAll('button')[a].classList.add('right');
+      box.querySelector('.fb').textContent=(ok?'Correct. ':'Not quite. ')+why;
+      $('#score').textContent='Score: '+good+' of '+done+(done===QZ.length?' · Quiz complete':'');
+    };
+    box.querySelector('.opts').append(b);
+  });
+  $('#quizBox').append(box);
+});
+</script>
+</body>
+</html>

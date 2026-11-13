@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CDISC Learning</title>
   <meta name="description" content="Material didáctico sobre los estándares CDISC.">
+  <script src="recursos/controles.js"></script>
   <style>
     :root {
       --bg: #f7f8fa; --card: #ffffff; --text: #1d2330; --muted: #5b6475;
       --accent: #1f6feb; --border: #e2e6ee;
     }
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #12151c; --card: #1b2029; --text: #e7eaf0; --muted: #9aa3b5;
-              --accent: #5a9cff; --border: #2a313d; }
+      :root:not([data-theme="light"]) {
+        --bg: #12151c; --card: #1b2029; --text: #e7eaf0; --muted: #9aa3b5;
+        --accent: #5a9cff; --border: #2a313d; color-scheme: dark;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #12151c; --card: #1b2029; --text: #e7eaf0; --muted: #9aa3b5;
+      --accent: #5a9cff; --border: #2a313d; color-scheme: dark;
     }
     * { box-sizing: border-box; }
     body { margin: 0; background: var(--bg); color: var(--text);
            font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-    main { max-width: 860px; margin: 0 auto; padding: 48px 16px; }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 16px 48px; }
     h1 { margin: 0 0 4px; font-size: 2rem; }
     p.lead { margin: 0 0 32px; color: var(--muted); }
     input { width: 100%; padding: 10px 14px; margin-bottom: 20px; font: inherit;
@@ -33,18 +40,36 @@
     footer { margin-top: 48px; color: var(--muted); font-size: .875rem; }
   </style>
 </head>
-<body>
+<body data-pagina="indice">
 <main>
   <h1>CDISC Learning</h1>
-  <p class="lead">Material didáctico sobre los estándares CDISC (CDASH, SDTM, ADaM, Define-XML, terminología controlada…).</p>
+  <p class="lead" id="lead"></p>
 
-  <input id="filtro" type="search" placeholder="Buscar lección…" aria-label="Buscar lección">
-  <ul id="lista"><li class="status">Cargando lecciones…</li></ul>
+  <input id="filtro" type="search">
+  <ul id="lista"></ul>
 
-  <footer>Las lecciones se listan automáticamente desde la carpeta <code>lecciones/</code> del repositorio.</footer>
+  <footer id="pie"></footer>
 </main>
 
 <script>
+  const TXT = {
+    es: {
+      lead: "Material didáctico sobre los estándares CDISC (CDASH, SDTM, ADaM, Define-XML, terminología controlada…).",
+      buscar: "Buscar lección…", cargando: "Cargando lecciones…",
+      nada: "No hay lecciones que coincidan.", vacio: "Todavía no hay lecciones en español.",
+      error: "No se pudo cargar la lista de lecciones. Inténtalo de nuevo en unos minutos.",
+      pie: "Las lecciones se listan automáticamente desde la carpeta lecciones/ del repositorio."
+    },
+    en: {
+      lead: "Learning material on the CDISC standards (CDASH, SDTM, ADaM, Define-XML, controlled terminology…).",
+      buscar: "Search lessons…", cargando: "Loading lessons…",
+      nada: "No lessons match your search.", vacio: "There are no lessons in English yet.",
+      error: "The lesson list could not be loaded. Please try again in a few minutes.",
+      pie: "Lessons are listed automatically from the lecciones/en/ folder of the repository."
+    }
+  };
+  const CARPETA = { es: "lecciones", en: "lecciones/en" };
+
   // Deduce el usuario y el repositorio a partir de la URL de GitHub Pages
   // (usuario.github.io/repositorio/). Si se abre en local, usa los valores por defecto.
   const DEFAULT_OWNER = "anlausorod";
@@ -55,57 +80,88 @@
 
   const lista = document.getElementById("lista");
   const filtro = document.getElementById("filtro");
-  let lecciones = [];
+  const cache = {};   // lecciones ya cargadas, por idioma
+  let idioma = "es";
+  try { if (localStorage.getItem("cdisc-idioma") === "en") idioma = "en"; } catch (e) {}
 
-  // "02-sdtm-dominios.html" -> "Sdtm dominios"
+  // "02-sdtm-dominios.html" -> "Sdtm dominios" (solo si la lección no tiene <title>)
   function titulo(nombre) {
     const t = nombre.replace(/\.html?$/i, "").replace(/^\d+[-_ ]*/, "").replace(/[-_]+/g, " ");
     return t.charAt(0).toUpperCase() + t.slice(1);
   }
 
+  function estado(texto) {
+    lista.innerHTML = "";
+    const li = document.createElement("li");
+    li.className = "status";
+    li.textContent = texto;
+    lista.appendChild(li);
+  }
+
   function pintar() {
+    const lecciones = cache[idioma];
+    if (!lecciones) return;
+    if (!lecciones.length) return estado(TXT[idioma].vacio);
     const q = filtro.value.trim().toLowerCase();
     const visibles = lecciones.filter(l => l.titulo.toLowerCase().includes(q));
+    if (!visibles.length) return estado(TXT[idioma].nada);
     lista.innerHTML = "";
-    if (!visibles.length) {
-      lista.innerHTML = '<li class="status">No hay lecciones que coincidan.</li>';
-      return;
-    }
     for (const l of visibles) {
       const li = document.createElement("li");
       const a = document.createElement("a");
-      a.href = "lecciones/" + encodeURIComponent(l.nombre);
-      a.innerHTML = "<strong></strong>";
-      a.firstChild.textContent = l.titulo;
+      a.href = CARPETA[idioma] + "/" + encodeURIComponent(l.nombre);
+      const s = document.createElement("strong");
+      s.textContent = l.titulo;
+      a.appendChild(s);
       li.appendChild(a);
       lista.appendChild(li);
     }
   }
 
-  fetch(`https://api.github.com/repos/${owner}/${repo}/contents/lecciones`)
-    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(archivos => {
-      lecciones = archivos
-        .filter(f => f.type === "file" && /\.html?$/i.test(f.name))
-        .map(f => ({ nombre: f.name, titulo: titulo(f.name) }))
-        .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { numeric: true }));
-      pintar();
-      // Usa el <title> de cada lección como nombre visible, si se puede leer.
-      return Promise.all(lecciones.map(l =>
-        fetch("lecciones/" + encodeURIComponent(l.nombre))
-          .then(r => r.ok ? r.text() : "")
-          .then(html => {
-            const t = new DOMParser().parseFromString(html, "text/html").title.trim();
-            if (t) l.titulo = t;
-          })
-          .catch(() => {})
-      )).then(pintar);
-    })
-    .catch(() => {
-      lista.innerHTML = '<li class="status">No se pudo cargar la lista de lecciones. Inténtalo de nuevo en unos minutos.</li>';
-    });
+  function cargar(l) {
+    if (cache[l]) return pintar();
+    estado(TXT[l].cargando);
+    fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${CARPETA[l]}`)
+      .then(r => {
+        if (r.status === 404) return [];          // la carpeta aún no existe
+        if (!r.ok) throw new Error(r.status);
+        return r.json();
+      })
+      .then(archivos => {
+        const lecciones = archivos
+          .filter(f => f.type === "file" && /\.html?$/i.test(f.name))
+          .map(f => ({ nombre: f.name, titulo: titulo(f.name) }))
+          .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { numeric: true }));
+        cache[l] = lecciones;
+        pintar();
+        // Usa el <title> de cada lección como nombre visible, si se puede leer.
+        return Promise.all(lecciones.map(x =>
+          fetch(CARPETA[l] + "/" + encodeURIComponent(x.nombre))
+            .then(r => r.ok ? r.text() : "")
+            .then(h => {
+              const t = new DOMParser().parseFromString(h, "text/html").title.trim();
+              if (t) x.titulo = t;
+            })
+            .catch(() => {})
+        )).then(pintar);
+      })
+      .catch(() => { if (l === idioma) estado(TXT[l].error); });
+  }
 
+  function aplicarIdioma(l) {
+    idioma = l;
+    document.documentElement.lang = l;
+    const t = TXT[l];
+    document.getElementById("lead").textContent = t.lead;
+    document.getElementById("pie").textContent = t.pie;
+    filtro.placeholder = t.buscar;
+    filtro.setAttribute("aria-label", t.buscar);
+    cargar(l);
+  }
+
+  document.addEventListener("cdisc:idioma", e => aplicarIdioma(e.detail));
   filtro.addEventListener("input", pintar);
+  aplicarIdioma(idioma);
 </script>
 </body>
 </html>
