@@ -90,6 +90,16 @@
         .map(f => ({ nombre: f.name, titulo: titulo(f.name) }))
         .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { numeric: true }));
       pintar();
+      // Usa el <title> de cada lección como nombre visible, si se puede leer.
+      return Promise.all(lecciones.map(l =>
+        fetch("lecciones/" + encodeURIComponent(l.nombre))
+          .then(r => r.ok ? r.text() : "")
+          .then(html => {
+            const t = new DOMParser().parseFromString(html, "text/html").title.trim();
+            if (t) l.titulo = t;
+          })
+          .catch(() => {})
+      )).then(pintar);
     })
     .catch(() => {
       lista.innerHTML = '<li class="status">No se pudo cargar la lista de lecciones. Inténtalo de nuevo en unos minutos.</li>';
