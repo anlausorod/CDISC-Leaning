@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CDISC Learning</title>
+  <meta name="description" content="Material didáctico sobre los estándares CDISC.">
+  <style>
+    :root {
+      --bg: #f7f8fa; --card: #ffffff; --text: #1d2330; --muted: #5b6475;
+      --accent: #1f6feb; --border: #e2e6ee;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #12151c; --card: #1b2029; --text: #e7eaf0; --muted: #9aa3b5;
+              --accent: #5a9cff; --border: #2a313d; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text);
+           font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    main { max-width: 860px; margin: 0 auto; padding: 48px 16px; }
+    h1 { margin: 0 0 4px; font-size: 2rem; }
+    p.lead { margin: 0 0 32px; color: var(--muted); }
+    input { width: 100%; padding: 10px 14px; margin-bottom: 20px; font: inherit;
+            color: var(--text); background: var(--card);
+            border: 1px solid var(--border); border-radius: 8px; }
+    ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+    li a { display: block; padding: 16px 18px; background: var(--card);
+           border: 1px solid var(--border); border-radius: 10px;
+           color: var(--text); text-decoration: none; }
+    li a:hover { border-color: var(--accent); }
+    li a strong { color: var(--accent); }
+    .status { color: var(--muted); }
+    footer { margin-top: 48px; color: var(--muted); font-size: .875rem; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>CDISC Learning</h1>
+  <p class="lead">Material didáctico sobre los estándares CDISC (CDASH, SDTM, ADaM, Define-XML, terminología controlada…).</p>
+
+  <input id="filtro" type="search" placeholder="Buscar lección…" aria-label="Buscar lección">
+  <ul id="lista"><li class="status">Cargando lecciones…</li></ul>
+
+  <footer>Las lecciones se listan automáticamente desde la carpeta <code>lecciones/</code> del repositorio.</footer>
+</main>
+
+<script>
+  // Deduce el usuario y el repositorio a partir de la URL de GitHub Pages
+  // (usuario.github.io/repositorio/). Si se abre en local, usa los valores por defecto.
+  const DEFAULT_OWNER = "anlausorod";
+  const DEFAULT_REPO = "CDISC-Leaning";
+  const host = location.hostname;
+  const owner = host.endsWith(".github.io") ? host.split(".")[0] : DEFAULT_OWNER;
+  const repo = host.endsWith(".github.io") ? (location.pathname.split("/")[1] || DEFAULT_REPO) : DEFAULT_REPO;
+
+  const lista = document.getElementById("lista");
+  const filtro = document.getElementById("filtro");
+  let lecciones = [];
+
+  // "02-sdtm-dominios.html" -> "Sdtm dominios"
+  function titulo(nombre) {
+    const t = nombre.replace(/\.html?$/i, "").replace(/^\d+[-_ ]*/, "").replace(/[-_]+/g, " ");
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+
+  function pintar() {
+    const q = filtro.value.trim().toLowerCase();
+    const visibles = lecciones.filter(l => l.titulo.toLowerCase().includes(q));
+    lista.innerHTML = "";
+    if (!visibles.length) {
+      lista.innerHTML = '<li class="status">No hay lecciones que coincidan.</li>';
+      return;
+    }
+    for (const l of visibles) {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "lecciones/" + encodeURIComponent(l.nombre);
+      a.innerHTML = "<strong></strong>";
+      a.firstChild.textContent = l.titulo;
+      li.appendChild(a);
+      lista.appendChild(li);
+    }
+  }
+
+  fetch(`https://api.github.com/repos/${owner}/${repo}/contents/lecciones`)
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(archivos => {
+      lecciones = archivos
+        .filter(f => f.type === "file" && /\.html?$/i.test(f.name))
+        .map(f => ({ nombre: f.name, titulo: titulo(f.name) }))
+        .sort((a, b) => a.nombre.localeCompare(b.nombre, "es", { numeric: true }));
+      pintar();
+    })
+    .catch(() => {
+      lista.innerHTML = '<li class="status">No se pudo cargar la lista de lecciones. Inténtalo de nuevo en unos minutos.</li>';
+    });
+
+  filtro.addEventListener("input", pintar);
+</script>
+</body>
+</html>

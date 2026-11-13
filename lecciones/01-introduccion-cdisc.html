@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Introducción a CDISC</title>
+  <style>
+    body { max-width: 760px; margin: 0 auto; padding: 40px 16px;
+           font: 16px/1.65 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+           color: #1d2330; background: #fff; }
+    @media (prefers-color-scheme: dark) { body { color: #e7eaf0; background: #12151c; } }
+    h1 { margin-top: 0; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid #8884; vertical-align: top; }
+    a { color: #1f6feb; }
+  </style>
+</head>
+<body>
+  <p><a href="../">← Volver al índice</a></p>
+  <h1>Introducción a CDISC</h1>
+  <p><strong>CDISC</strong> (Clinical Data Interchange Standards Consortium) es una organización sin ánimo de lucro
+  que desarrolla estándares para recoger, organizar, analizar e intercambiar datos de investigación clínica.
+  Las agencias reguladoras como la FDA (EE. UU.) y la PMDA (Japón) exigen datos en formato CDISC en los envíos.</p>
+
+  <h2>Principales estándares</h2>
+  <table>
+    <tr><th>Estándar</th><th>Para qué sirve</th></tr>
+    <tr><td>CDASH</td><td>Estandariza la recogida de datos en los CRF (cuadernos de recogida de datos).</td></tr>
+    <tr><td>SDTM</td><td>Organiza los datos tabulados del estudio en dominios (DM, AE, LB, VS…).</td></tr>
+    <tr><td>ADaM</td><td>Define los conjuntos de datos de análisis (ADSL, BDS, OCCDS…).</td></tr>
+    <tr><td>SEND</td><td>Aplicación de SDTM a estudios no clínicos.</td></tr>
+    <tr><td>Define-XML</td><td>Metadatos que describen los conjuntos de datos enviados.</td></tr>
+    <tr><td>Terminología controlada (CT)</td><td>Listas de valores permitidos, mantenidas junto con el NCI EVS.</td></tr>
+  </table>
+
+  <h2>Flujo típico de los datos</h2>
+  <p>CRF (CDASH) → datos tabulados (SDTM) → datos de análisis (ADaM) → tablas, listados y figuras,
+  todo ello documentado con Define-XML.</p>
+</body>
+</html>
