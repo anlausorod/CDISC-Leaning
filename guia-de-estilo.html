@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guía de estilo</title>
+<meta name="description" content="Propuestas de estilo visual para las lecciones de CDISC Learning.">
+<script src="recursos/controles.js"></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Baloo+2:wght@600;700&family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;600&family=Lexend:wght@400;500;600&family=Nunito:wght@700;800&family=Nunito+Sans:wght@400;600&family=Poppins:wght@600;700&display=swap">
+<style>
+/* Página contenedora: neutra, para que destaquen las propuestas */
+:root{--bg:#F5F6F8;--surface:#FFFFFF;--ink:#1B1F27;--muted:#5A6170;--line:#DDE1E8}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111317;--surface:#1A1D23;--ink:#E8EAEE;--muted:#9AA1AE;--line:#2D323B;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#111317;--surface:#1A1D23;--ink:#E8EAEE;--muted:#9AA1AE;--line:#2D323B;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:24px max(16px,env(safe-area-inset-left,0px)) 64px;display:flex;flex-direction:column;gap:40px}
+.intro h1{margin:0 0 8px;font-size:clamp(28px,5vw,38px);line-height:1.15}
+.intro p{margin:0 0 12px;max-width:68ch;color:var(--muted)}
+.salto{display:flex;flex-wrap:wrap;gap:8px}
+.salto a{font-size:14px;color:var(--ink);text-decoration:none;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px}
+.salto a:hover{border-color:var(--ink)}
+.mono{font-family:"JetBrains Mono",Consolas,monospace}
+
+/* ---------- Propuesta (todo lo de dentro usa las variables --p-*) ---------- */
+.prop{background:var(--p-bg);color:var(--p-ink);border:1px solid var(--p-line);border-radius:18px;padding:clamp(18px,4vw,32px);display:flex;flex-direction:column;gap:24px;font:400 17px/1.6 var(--p-body);scroll-margin-top:16px}
+.prop h2,.prop h3{font-family:var(--p-display);margin:0;line-height:1.2;text-wrap:balance}
+.prop h2{font-size:clamp(26px,5vw,34px)}
+.prop h3{font-size:19px}
+.prop p{margin:0;max-width:66ch}
+.prop .muted{color:var(--p-muted)}
+.cab{display:flex;flex-direction:column;gap:8px}
+.eyebrow{font:600 12px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--p-primary)}
+.banda{height:8px;border-radius:999px;background:linear-gradient(90deg,var(--p-primary),var(--p-accent),var(--p-sun))}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px}
+.caja{background:var(--p-surface);border:1px solid var(--p-line);border-radius:var(--p-radius);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.caja>h3{font-size:16px}
+.etq{font:600 11px/1 "JetBrains Mono",monospace;letter-spacing:.1em;text-transform:uppercase;color:var(--p-muted)}
+
+/* muestras de color */
+.muestras{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.muestra{display:flex;flex-direction:column;gap:4px;font-size:12px}
+.muestra i{display:block;height:44px;border-radius:10px;border:1px solid var(--p-line)}
+.muestra b{font-weight:600}
+.muestra code{font:500 12px "JetBrains Mono",monospace;color:var(--p-muted)}
+
+/* tipografía */
+.tipo-display{font:700 30px/1.15 var(--p-display)}
+.tipo-cuerpo{font:400 17px/1.6 var(--p-body)}
+
+/* menú y botones */
+.nav{display:flex;flex-wrap:wrap;gap:8px}
+.nav a{font-size:14px;color:var(--p-ink);text-decoration:none;border:1px solid var(--p-line);background:var(--p-surface);border-radius:999px;padding:4px 12px}
+.nav a.on{background:var(--p-primary);border-color:var(--p-primary);color:var(--p-on-primary);font-weight:600}
+.btns{display:flex;flex-wrap:wrap;gap:10px}
+.btn{font:600 15px var(--p-body);border-radius:var(--p-radius);padding:10px 16px;border:2px solid transparent;cursor:pointer}
+.btn.pri{background:var(--p-primary);color:var(--p-on-primary)}
+.btn.sec{background:transparent;color:var(--p-ink);border-color:var(--p-line)}
+.btn.acc{background:var(--p-accent);color:var(--p-on-accent)}
+.btn:focus-visible{outline:3px solid var(--p-sun);outline-offset:2px}
+
+/* etiquetas de rol SDTM */
+.roles{display:flex;flex-wrap:wrap;gap:8px}
+.tag{display:inline-flex;align-items:center;gap:6px;font:600 13px "JetBrains Mono",monospace;color:var(--c);background:var(--cb);border-radius:6px;padding:4px 10px}
+.tag small{font:500 11px var(--p-body);opacity:.85}
+
+/* tabla */
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font:500 14px "JetBrains Mono",monospace}
+th,td{border:1px solid var(--p-line);padding:8px 10px;text-align:left;white-space:nowrap}
+th{background:var(--p-soft);font-weight:600}
+td.on,th.on{background:var(--cb);color:var(--c);box-shadow:inset 0 0 0 2px var(--c)}
+
+/* explicación */
+.explica{border-left:5px solid var(--c);background:var(--cb);border-radius:0 var(--p-radius) var(--p-radius) 0;padding:12px 16px;font-size:16px}
+.explica b{color:var(--c)}
+
+/* cuestionario */
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts span{font:500 14px var(--p-body);background:var(--p-bg);border:1px solid var(--p-line);border-radius:var(--p-radius);padding:8px 12px}
+.opts .bien{background:var(--p-ok-bg);border-color:var(--p-ok);color:var(--p-ok)}
+.opts .mal{background:var(--p-no-bg);border-color:var(--p-no);color:var(--p-no)}
+
+/* contraste */
+.contraste{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;font-size:13px}
+.contraste div{display:flex;justify-content:space-between;gap:8px;align-items:center;border:1px solid var(--p-line);border-radius:8px;padding:6px 10px;background:var(--p-surface)}
+.aa{font:600 11px "JetBrains Mono",monospace;padding:2px 6px;border-radius:4px;background:var(--p-ok-bg);color:var(--p-ok)}
+.aa.falla{background:var(--p-no-bg);color:var(--p-no)}
+
+.pie{font-size:14px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="intro">
+    <h1>Guía de estilo · propuestas</h1>
+    <p>Cuatro estilos posibles para las lecciones. Cada uno muestra su paleta, su tipografía y los elementos que usan las lecciones: menú, botones, etiquetas de rol, tabla de datos, explicación y cuestionario.</p>
+    <p>Usa el botón ☀/☾ de arriba para ver cada propuesta en tema claro y oscuro. Al final de cada una se comprueba el contraste del texto: <b>AA</b> significa que cumple el mínimo de legibilidad de las pautas WCAG (4,5:1).</p>
+    <nav class="salto" id="salto" aria-label="Propuestas"></nav>
+  </header>
+  <div id="propuestas" style="display:flex;flex-direction:column;gap:40px"></div>
+  <footer class="pie">Los colores de rol (Identificador, Tema, Tiempo, Calificador, Regla) mantienen el mismo significado en todas las propuestas, como en la lección de SDTM 2.1.</footer>
+</div>
+
+<script>
+/* Cada propuesta: tipografías, radio de esquinas y colores para claro y oscuro.
+   Roles: [color de texto, fondo] para id, topic, timing, qual, rule. */
+const P = [
+  {
+    id: "laboratorio", nombre: "1 · Laboratorio",
+    idea: "Turquesa y coral sobre blanco verdoso. Limpio y científico, pero con energía. Tipografía redondeada y amable.",
+    display: '"Nunito", system-ui, sans-serif', body: '"Nunito Sans", system-ui, sans-serif',
+    fuentes: "Nunito (títulos) · Nunito Sans (texto)", radius: "12px",
+    claro: { bg:"#F2FAF9", surface:"#FFFFFF", soft:"#E3F2F0", ink:"#10302E", muted:"#486461", line:"#CBE3DF",
+      primary:"#0B7A6F", "on-primary":"#FFFFFF", accent:"#C2410C", "on-accent":"#FFFFFF", sun:"#F5B700",
+      ok:"#0B6B4E", "ok-bg":"#D7F3E7", no:"#B42318", "no-bg":"#FDE4E1",
+      id:["#1D56C2","#E2ECFF"], topic:["#B5174F","#FCE3EC"], timing:["#8A4E00","#FFEFC7"], qual:["#0A6A4E","#D5F3E6"], rule:["#6236D6","#ECE6FF"] },
+    oscuro: { bg:"#0D1D1C", surface:"#132927", soft:"#1A3532", ink:"#E2F4F1", muted:"#9CB9B5", line:"#264541",
+      primary:"#3FD1BF", "on-primary":"#062320", accent:"#FF8A4C", "on-accent":"#2A1203", sun:"#FFCB3D",
+      ok:"#5FE0B0", "ok-bg":"#103A2D", no:"#FF9B8F", "no-bg":"#4A1A16",
+      id:["#8DB5FF","#1B2D50"], topic:["#FF8DB5","#4A1A2C"], timing:["#FFC75A","#45320C"], qual:["#5FE0B0","#103A2D"], rule:["#B7A2FF","#2D2152"] }
+  },
+  {
+    id: "mosaico", nombre: "2 · Mosaico",
+    idea: "Violeta, magenta y naranja. El más vibrante y moderno; ideal si quieres que las lecciones se sientan dinámicas.",
+    display: '"Poppins", system-ui, sans-serif', body: '"Inter", system-ui, sans-serif',
+    fuentes: "Poppins (títulos) · Inter (texto)", radius: "14px",
+    claro: { bg:"#FAF7FF", surface:"#FFFFFF", soft:"#F1EBFC", ink:"#1E1433", muted:"#5B5270", line:"#E2D9F3",
+      primary:"#6D28D9", "on-primary":"#FFFFFF", accent:"#C2185B", "on-accent":"#FFFFFF", sun:"#F97316",
+      ok:"#047857", "ok-bg":"#D7F6E9", no:"#B91C1C", "no-bg":"#FDE2E2",
+      id:["#1D4ED8","#E0EAFF"], topic:["#A3154F","#FCE4F1"], timing:["#9A4A06","#FEEFD6"], qual:["#03684C","#D7F6E9"], rule:["#5B21B6","#EDE4FF"] },
+    oscuro: { bg:"#140F22", surface:"#1E1730", soft:"#271E3D", ink:"#F0EAFB", muted:"#ABA2C2", line:"#352B4D",
+      primary:"#A78BFA", "on-primary":"#1A0B3D", accent:"#F472B6", "on-accent":"#3B0A22", sun:"#FB923C",
+      ok:"#6EE7B7", "ok-bg":"#0F3A2C", no:"#FCA5A5", "no-bg":"#4A1818",
+      id:["#93B4FF","#1C2A55"], topic:["#F9A8D4","#4C1733"], timing:["#FDBA74","#46290F"], qual:["#6EE7B7","#0F3A2C"], rule:["#C4B5FD","#2E2156"] }
+  },
+  {
+    id: "tropical", nombre: "3 · Tropical",
+    idea: "Turquesa, mango y rosa sobre crema cálida. Alegre y cercano. La tipografía Atkinson Hyperlegible está diseñada para máxima legibilidad.",
+    display: '"Baloo 2", system-ui, sans-serif', body: '"Atkinson Hyperlegible", system-ui, sans-serif',
+    fuentes: "Baloo 2 (títulos) · Atkinson Hyperlegible (texto)", radius: "16px",
+    claro: { bg:"#FFF8EE", surface:"#FFFFFF", soft:"#FCEFDC", ink:"#2A1F14", muted:"#685847", line:"#EFDDC4",
+      primary:"#0E7490", "on-primary":"#FFFFFF", accent:"#D61F69", "on-accent":"#FFFFFF", sun:"#F59E0B",
+      ok:"#2B6E12", "ok-bg":"#E0F4D3", no:"#B42318", "no-bg":"#FFE3DF",
+      id:["#0B5F96","#DCEFFB"], topic:["#B0174F","#FFE2EE"], timing:["#8F4507","#FFE9C9"], qual:["#2B6E12","#E0F4D3"], rule:["#7A2FC8","#F1E4FF"] },
+    oscuro: { bg:"#1C150E", surface:"#291F15", soft:"#33271B", ink:"#FBEFDF", muted:"#C2AE97", line:"#45372A",
+      primary:"#38C6E8", "on-primary":"#062833", accent:"#FF7EB0", "on-accent":"#3D0A20", sun:"#FBBF24",
+      ok:"#9BE07A", "ok-bg":"#1E3A12", no:"#FF9B8F", "no-bg":"#4A1A16",
+      id:["#7CC8F5","#12324A"], topic:["#FF8FBB","#4D1730"], timing:["#FFB866","#4A2D0C"], qual:["#9BE07A","#1E3A12"], rule:["#CDA6FF","#352053"] }
+  },
+  {
+    id: "arcoiris", nombre: "4 · Arcoíris suave",
+    idea: "Azul índigo con acentos rosa y menta sobre fondo azulado. Colorido pero sereno. Lexend se creó para facilitar la lectura.",
+    display: '"Fraunces", Georgia, serif', body: '"Lexend", system-ui, sans-serif',
+    fuentes: "Fraunces (títulos) · Lexend (texto)", radius: "10px",
+    claro: { bg:"#F3F6FF", surface:"#FFFFFF", soft:"#E7ECFB", ink:"#18213A", muted:"#525D7A", line:"#D6DEF2",
+      primary:"#3B5BDB", "on-primary":"#FFFFFF", accent:"#C2255C", "on-accent":"#FFFFFF", sun:"#20C997",
+      ok:"#087F5B", "ok-bg":"#D3F9E8", no:"#C92A2A", "no-bg":"#FFE3E3",
+      id:["#2F44B3","#E5EBFF"], topic:["#B01C52","#FFE3EE"], timing:["#8F4700","#FFEBD1"], qual:["#06704F","#D3F9E8"], rule:["#5F3DC4","#EFE9FF"] },
+    oscuro: { bg:"#10152A", surface:"#182040", soft:"#202A50", ink:"#E8ECFA", muted:"#A3ACCB", line:"#2C3763",
+      primary:"#91A7FF", "on-primary":"#0E1640", accent:"#FAA2C1", "on-accent":"#3F0A1E", sun:"#63E6BE",
+      ok:"#63E6BE", "ok-bg":"#0D3D2E", no:"#FFA8A8", "no-bg":"#4D1A1A",
+      id:["#9DB2FF","#1F2A5C"], topic:["#FF9EC2","#4F1A33"], timing:["#FFC078","#4A2E0F"], qual:["#63E6BE","#0D3D2E"], rule:["#B9A5FF","#2F2460"] }
+  }
+];
+const ROLES = [["id","Identificador","USUBJID"],["topic","Tema","AETERM"],["timing","Tiempo","AESTDY"],["qual","Calificador","AESEV"],["rule","Regla","TSVAL"]];
+const NOMBRES = { bg:"Fondo", surface:"Superficie", ink:"Texto", muted:"Texto suave", primary:"Principal", accent:"Acento", sun:"Destacado", line:"Bordes" };
+
+/* --- Contraste WCAG --- */
+function lum(hex){
+  const c=[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)/255).map(v=>v<=.03928?v/12.92:((v+.055)/1.055)**2.4);
+  return .2126*c[0]+.7152*c[1]+.0722*c[2];
+}
+function ratio(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)}
+
+/* --- CSS de cada propuesta (claro, oscuro por sistema y oscuro forzado) --- */
+function vars(c){
+  let s="";
+  for(const [k,v] of Object.entries(c)) if(!Array.isArray(v)) s+=`--p-${k}:${v};`;
+  return s;
+}
+function rolesCss(sel,c){
+  return ROLES.map(([r])=>`${sel} .r-${r}{--c:${c[r][0]};--cb:${c[r][1]}}`).join("");
+}
+let css="";
+for(const p of P){
+  const s=`#${p.id}`;
+  css+=`${s}{--p-display:${p.display};--p-body:${p.body};--p-radius:${p.radius};${vars(p.claro)}}${rolesCss(s,p.claro)}`;
+  css+=`@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) ${s}{${vars(p.oscuro)}}${rolesCss(':root:not([data-theme="light"]) '+s,p.oscuro)}}`;
+  css+=`:root[data-theme="dark"] ${s}{${vars(p.oscuro)}}${rolesCss(':root[data-theme="dark"] '+s,p.oscuro)}`;
+}
+const st=document.createElement("style");st.textContent=css;document.head.appendChild(st);
+
+/* --- Contenido de cada propuesta --- */
+function esOscuro(){
+  const t=document.documentElement.dataset.theme;
+  return t ? t==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+}
+function muestras(c){
+  return Object.keys(NOMBRES).map(k=>`<div class="muestra"><i style="background:${c[k]}"></i><b>${NOMBRES[k]}</b><code>${c[k]}</code></div>`).join("");
+}
+function contraste(c){
+  const pares=[["Texto / fondo",c.ink,c.bg],["Texto suave / fondo",c.muted,c.bg],["Botón principal",c["on-primary"],c.primary],["Botón acento",c["on-accent"],c.accent]]
+    .concat(ROLES.map(([r,n])=>["Rol "+n,c[r][0],c[r][1]]));
+  return pares.map(([n,a,b])=>{const r=ratio(a,b);return `<div><span>${n}</span><span class="mono">${r.toFixed(1)}:1 <span class="aa ${r<4.5?"falla":""}">${r>=4.5?"AA":"bajo"}</span></span></div>`}).join("");
+}
+function render(){
+  const oscuro=esOscuro();
+  document.getElementById("propuestas").innerHTML=P.map(p=>{
+    const c=oscuro?p.oscuro:p.claro;
+    return `
+<section class="prop" id="${p.id}" aria-labelledby="t-${p.id}">
+  <div class="banda"></div>
+  <div class="cab">
+    <span class="eyebrow">Propuesta ${p.nombre}</span>
+    <h2 id="t-${p.id}">Conceptos y términos del modelo</h2>
+    <p class="muted">${p.idea}</p>
+  </div>
+
+  <div class="grid2">
+    <div class="caja"><h3 class="etq">Paleta · tema ${oscuro?"oscuro":"claro"}</h3><div class="muestras">${muestras(c)}</div></div>
+    <div class="caja"><h3 class="etq">Tipografía</h3>
+      <div class="tipo-display">Observación, variable y dominio</div>
+      <div class="tipo-cuerpo">Un conjunto de datos SDTM es un archivo plano, como una hoja de cálculo. Cada concepto tiene un lugar exacto en esa tabla.</div>
+      <span class="muted" style="font-size:14px">${p.fuentes} · <span class="mono">código: JetBrains Mono</span></span>
+    </div>
+  </div>
+
+  <div class="caja"><h3 class="etq">Menú y botones</h3>
+    <nav class="nav" aria-label="Ejemplo de menú"><a href="#${p.id}">← Índice</a><a href="#${p.id}" class="on">Las tres ideas</a><a href="#${p.id}">Los 5 roles</a><a href="#${p.id}">Comprueba lo aprendido</a></nav>
+    <div class="btns"><button class="btn pri" type="button">Empezar lección</button><button class="btn acc" type="button">Hacer el cuestionario</button><button class="btn sec" type="button">Ver ejemplo</button></div>
+  </div>
+
+  <div class="caja"><h3 class="etq">Roles de variable</h3>
+    <div class="roles">${ROLES.map(([r,n,v])=>`<span class="tag r-${r}">${v}<small>${n}</small></span>`).join("")}</div>
+    <div class="scroll"><table aria-label="Ejemplo de tabla AE">
+      <tr><th>DOMAIN</th><th>USUBJID</th><th>AESEQ</th><th class="on r-topic">AETERM</th><th>AESEV</th><th>AESTDY</th></tr>
+      <tr><td>AE</td><td>101</td><td>1</td><td class="on r-topic">NAUSEA</td><td>MILD</td><td>6</td></tr>
+    </table></div>
+    <div class="explica r-topic"><b>AETERM · Tema (Topic)</b><br>«Náuseas» es el foco de la observación: el término del evento adverso.</div>
+  </div>
+
+  <div class="caja"><h3 class="etq">Cuestionario</h3>
+    <p style="font-weight:600">2. En el ejemplo de las náuseas, ¿qué rol tiene el valor MILD?</p>
+    <div class="opts"><span>Tema</span><span class="mal">Tiempo</span><span class="bien">Calificador de registro</span></div>
+    <p class="muted" style="font-size:15px">No es esa. La severidad describe el registro en su conjunto.</p>
+  </div>
+
+  <div class="caja"><h3 class="etq">Contraste del texto</h3><div class="contraste">${contraste(c)}</div></div>
+</section>`;
+  }).join("");
+}
+document.getElementById("salto").innerHTML=P.map(p=>`<a href="#${p.id}">${p.nombre}</a>`).join("");
+render();
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",render);
+</script>
+</body>
+</html>
