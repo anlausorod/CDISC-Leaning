@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDTMIG 3.1.1 · Cap. 2 Fundamentos del SDTM</title>
+<link rel="stylesheet" href="../recursos/estilo.css?v=3">
+<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=3">
+<script src="../recursos/controles.js?v=3"></script>
+</head>
+<body>
+<main>
+
+<section>
+  <span class="eyebrow">CDISC SDTMIG v3.1.1 · Capítulo 2</span>
+  <h1>Fundamentos del SDTM</h1>
+  <p class="lead">La guía de implementación resume en seis apartados las ideas básicas del modelo: qué es una observación, cómo se agrupan en dominios, qué tipos de dominio existen y cómo crear uno nuevo.</p>
+  <nav aria-label="Contenido">
+    <a href="#s21">2.1 Observaciones y variables</a><a href="#s22">2.2 Datasets y dominios</a><a href="#s23">2.3 Propósito especial</a><a href="#s24">2.4 Clases generales</a><a href="#s25">2.5 Modelos estándar</a><a href="#s26">2.6 Crear un dominio</a><a href="#quiz">Comprueba lo aprendido</a>
+  </nav>
+</section>
+
+<!-- ============ 2.1 ============ -->
+<section id="s21">
+  <span class="num">2.1</span>
+  <h2>Observaciones y variables</h2>
+  <p>El SDTM se construye alrededor de las <b>observaciones</b> recogidas sobre los sujetos de un estudio. Cada observación se describe con una serie de <b>variables</b>, y corresponde a una fila de un dataset o tabla.</p>
+  <div class="eq">
+    <div><b>Observación</b><i>= una fila</i><span>Un dato recogido sobre un sujeto del estudio.</span></div>
+    <div><b>Variable</b><i>= una columna</i><span>Describe la observación. Cada variable se clasifica según su Rol.</span></div>
+  </div>
+
+  <h3>Los roles de las variables</h3>
+  <p>El Rol indica qué tipo de información aporta la variable sobre cada observación y cómo se puede usar. Hay cuatro roles principales y un quinto, Regla, introducido en la V3.1.</p>
+  <div class="roles">
+    <div class="role r-id"><h3>Identificador</h3><span class="q">¿De quién y de qué registro hablamos?</span><span>Identifica el estudio, el sujeto, el dominio y el número de secuencia del registro.</span><span><span class="tag">STUDYID</span> <span class="tag">USUBJID</span> <span class="tag">DOMAIN</span> <span class="tag">--SEQ</span></span></div>
+    <div class="role r-topic"><h3>Tema (Topic)</h3><span class="q">¿Sobre qué trata?</span><span>Especifica el foco de la observación, por ejemplo el nombre de una prueba de laboratorio.</span><span><span class="tag">--TRT</span> <span class="tag">--TERM</span> <span class="tag">--TESTCD</span></span></div>
+    <div class="role r-timing"><h3>Tiempo (Timing)</h3><span class="q">¿Cuándo ocurrió?</span><span>Describe el momento de la observación, como la fecha de inicio y la de fin.</span><span><span class="tag">--STDTC</span> <span class="tag">--ENDTC</span> <span class="tag">--STDY</span></span></div>
+    <div class="role r-qual"><h3>Calificador (Qualifier)</h3><span class="q">¿Qué más sabemos?</span><span>Texto o valores numéricos que describen los resultados o rasgos adicionales, como unidades o adjetivos.</span><span><span class="tag">--ORRES</span> <span class="tag">--SEV</span> <span class="tag">--ORRESU</span></span></div>
+    <div class="role r-rule"><h3>Regla (Rule)</h3><span class="q">¿Cuándo empieza, termina o se repite?</span><span>Expresa un algoritmo o método ejecutable para definir condiciones de inicio, fin o repetición en el modelo de Diseño del Ensayo.</span></div>
+  </div>
+
+  <h3>Anatomía de una observación</h3>
+  <p>La guía usa este ejemplo del dominio de Eventos Adversos. Toca cada parte de la frase, o cada columna, para ver en qué variable se guarda y qué rol cumple.</p>
+  <div class="panel">
+    <div class="sentence" id="sentence">
+      <button class="seg r-id" data-k="USUBJID">El sujeto 101</button> tuvo
+      <button class="seg r-topic" data-k="AETERM">náuseas</button>
+      <button class="seg r-qual" data-k="AESEV">leves</button>
+      <button class="seg r-timing" data-k="AESTDY">a partir del Día 6 del estudio</button>
+    </div>
+    <div class="scroll">
+      <table id="aeTable" aria-label="La observación como fila del dataset AE">
+        <tr><th data-k="DOMAIN">DOMAIN</th><th data-k="USUBJID">USUBJID</th><th data-k="AESEQ">AESEQ</th><th data-k="AETERM">AETERM</th><th data-k="AESEV">AESEV</th><th data-k="AESTDY">AESTDY</th></tr>
+        <tr><td data-k="DOMAIN">AE</td><td data-k="USUBJID">101</td><td data-k="AESEQ">1</td><td data-k="AETERM">NAUSEA</td><td data-k="AESEV">MILD</td><td data-k="AESTDY">6</td></tr>
+      </table>
+    </div>
+    <div class="explain" id="explain" aria-live="polite"></div>
+    <span class="hint">Se pueden añadir más variables de tiempo y calificadores si hacen falta para describir bien la observación.</span>
+  </div>
+
+  <h3>Las cinco subclases de calificadores</h3>
+  <p>Elige una subclase para ver su definición y qué columnas de este registro de laboratorio pertenecen a ella. Los dos guiones de <code>--ORRES</code> se sustituyen por el código del dominio: en LB es <code>LBORRES</code>.</p>
+  <div class="panel">
+    <div class="tabs" id="qtabs" role="group" aria-label="Subclases de calificador"></div>
+    <div><h3 id="qtitle"></h3><p id="qdesc"></p></div>
+    <p class="hint" id="qex"></p>
+    <div class="scroll">
+      <table id="lbTable" aria-label="Registro de ejemplo del dominio LB">
+        <tr><th data-v="LBTESTCD">LBTESTCD<small>Tema</small></th><th data-v="LBTEST">LBTEST</th><th data-v="LBCAT">LBCAT</th><th data-v="LBORRES">LBORRES</th><th data-v="LBORRESU">LBORRESU</th><th data-v="LBORNRLO">LBORNRLO</th><th data-v="LBORNRHI">LBORNRHI</th><th data-v="LBSPEC">LBSPEC</th><th data-v="LBBLFL">LBBLFL</th></tr>
+        <tr><td data-v="LBTESTCD">GLUC</td><td data-v="LBTEST">Glucose</td><td data-v="LBCAT">CHEMISTRY</td><td data-v="LBORRES">98</td><td data-v="LBORRESU">mg/dL</td><td data-v="LBORNRLO">70</td><td data-v="LBORNRHI">99</td><td data-v="LBSPEC">SERUM</td><td data-v="LBBLFL">Y</td></tr>
+      </table>
+    </div>
+    <span class="hint">Verde: variables de la subclase elegida. Borde gris: la variable a la que se refieren. Los valores son ilustrativos.</span>
+  </div>
+</section>
+
+<!-- ============ 2.2 ============ -->
+<section id="s22">
+  <span class="num">2.2</span>
+  <h2>Datasets y dominios</h2>
+  <p>Un <b>dominio</b> es un conjunto de observaciones relacionadas lógicamente que comparten un tema común. Normalmente cada dominio se entrega como un <b>dataset</b>: un archivo plano en el que cada fila es una observación y cada columna una variable.</p>
+
+  <h3>El código DOMAIN</h3>
+  <p>Cada dataset se distingue por un código único de dos caracteres, que debe usarse de forma consistente en todo el envío. Cambia de dominio para ver sus tres usos.</p>
+  <div class="panel">
+    <div class="pick" id="dpick" role="group" aria-label="Dominio"><span class="hint">Dominio:</span></div>
+    <span class="hint" id="dname"></span>
+    <div class="uses">
+      <div><span>1. Nombre del dataset</span><b id="u1"></b></div>
+      <div><span>2. Valor de la variable DOMAIN</span><b id="u2"></b></div>
+      <div><span>3. Prefijo de casi todas las variables</span><b id="u3"></b><em id="u3b"></em></div>
+    </div>
+  </div>
+
+  <h3>Metadatos: el documento «Define»</h3>
+  <p>Cada dataset va acompañado de un documento de definición de datos, «Define» (define.xml), que describe sus variables con siete atributos. Aquí aplicados a <code>AETERM</code>:</p>
+  <div class="panel scroll">
+    <table class="meta" aria-label="Los siete atributos de metadatos">
+      <tr><th>Atributo</th><th>Ejemplo</th><th>Qué indica la guía</th></tr>
+      <tr><td>Nombre</td><td>AETERM</td><td>Máximo 8 caracteres, por compatibilidad con SAS Transport.</td></tr>
+      <tr><td>Etiqueta</td><td>Reported Term for the Adverse Event</td><td>Descriptiva, hasta 40 caracteres, única dentro del dataset.</td></tr>
+      <tr><td>Tipo</td><td>Char</td><td>Carácter o numérico.</td></tr>
+      <tr><td>Términos controlados o formato</td><td>**</td><td>Terminología controlada o formato de presentación. <b>*</b> = lista definida por el patrocinador; <b>**</b> = fuente externa, como MedDRA.</td></tr>
+      <tr><td>Origen</td><td>CRF</td><td>De dónde procede la variable.</td></tr>
+      <tr><td>Rol</td><td><span class="tag r-topic">Topic</span></td><td>Identificador, Tema, Tiempo o uno de los cinco calificadores. En los dominios de las clases generales ya están predefinidos.</td></tr>
+      <tr><td>Comentarios</td><td>Texto libre</td><td>Cualquier información relevante sobre la variable o sus datos.</td></tr>
+    </table>
+  </div>
+  <div class="two">
+    <div><h3>Datos crudos y derivados</h3><span>Las variables guardan valores tal como se recogieron y valores derivados, como una conversión a unidades estándar o un promedio.</span></div>
+    <div><h3>SDTM frente a la guía</h3><span>El SDTM solo fija nombre, etiqueta y tipo. Los modelos de dominio de la guía (secciones 5 y 6) añaden términos controlados, origen y notas de uso.</span></div>
+  </div>
+</section>
+
+<!-- ============ 2.3 ============ -->
+<section id="s23">
+  <span class="num">2.3</span>
+  <h2>Dominios de propósito especial</h2>
+  <p>Tienen una <b>estructura fija</b>: no se pueden ampliar con calificadores ni variables de tiempo distintos de los especificados.</p>
+  <div class="cards">
+    <div class="card c-esp"><span class="code">DM</span><h3>Demographics</h3><span>Un conjunto de variables estándar que describen a cada sujeto del estudio.</span><span class="hint">Sección 5 de la guía</span></div>
+    <div class="card c-esp"><span class="code">CO</span><h3>Comments</h3><span>Estructura fija para comentarios de texto libre sobre un sujeto o sobre registros de otros dominios.</span><span class="hint">Sección 5 de la guía</span></div>
+    <div class="card c-dis"><span class="code">TA · TE · TV…</span><h3>Diseño del ensayo</h3><span>Datasets de estructura fija que describen el diseño del estudio.</span><span class="hint">Sección 7 de la guía</span></div>
+    <div class="card c-rel"><span class="code">SUPPQUAL · RELREC</span><h3>Relaciones</h3><span>Datasets de estructura fija para relacionar registros y añadir calificadores no estándar.</span><span class="hint">Sección 8 de la guía</span></div>
+  </div>
+</section>
+
+<!-- ============ 2.4 ============ -->
+<section id="s24">
+  <span class="num">2.4</span>
+  <h2>Las clases generales de dominio</h2>
+  <p>El resto de observaciones se reparten entre tres <b>clases generales</b>. Elige una para ver qué recoge.</p>
+  <div class="panel">
+    <div class="tabs" id="ctabs" role="group" aria-label="Clases generales"></div>
+    <div class="clase" id="clase" aria-live="polite"></div>
+  </div>
+  <p>En la mayoría de los casos la clase se deduce fácilmente del tema. A menudo <b>Hallazgos</b> es la mejor opción para mediciones o respuestas a preguntas. Si no está claro, se decide según la intención científica del protocolo, el plan de análisis o la estructura de los datos (apéndice 10.6).</p>
+  <h3>Tres reglas comunes</h3>
+  <ul class="rules">
+    <li><span class="ok">Identificadores</span><span>El mismo conjunto de variables identificadoras se aplica a todos los dominios de las clases generales.</span></li>
+    <li><span class="ok">Tiempo</span><span>Cualquier variable de tiempo válida puede usarse en cualquier dataset, pero de forma consistente en todos los dominios.</span></li>
+    <li><span class="ok">Calificadores</span><span>Se puede añadir cualquier calificador de la misma clase general al modelo de dominio.</span></li>
+  </ul>
+</section>
+
+<!-- ============ 2.5 ============ -->
+<section id="s25">
+  <span class="num">2.5</span>
+  <h2>Los modelos de dominio estándar</h2>
+  <p>Estos son los dominios definidos o referenciados en la guía. Filtra por grupo y toca un código para ver su nombre.</p>
+  <div class="panel">
+    <div class="tabs" id="gtabs" role="group" aria-label="Grupos de dominios"></div>
+    <div class="doms" id="doms"></div>
+    <div class="explain r-qual" id="domInfo" aria-live="polite"></div>
+    <span class="hint">* No incluido en esta versión de la guía; se publicará aparte para comentarios.</span>
+  </div>
+  <h3>Qué puede y qué no puede hacer el patrocinador</h3>
+  <ul class="rules">
+    <li><span class="ok">Solo lo recogido</span><span>Se envían únicamente los dominios cuyos datos se recogieron realmente en el estudio.</span></li>
+    <li><span class="ok">Permitido</span><span>Añadir variables de tiempo y calificadores relevantes de la misma clase general, y quitar variables del modelo (con su descripción en Define).</span></li>
+    <li><span class="no">Prohibido</span><span>Añadir otras variables nuevas, renombrar las existentes o usarlas para un fin distinto.</span></li>
+    <li><span class="ok">SUPPQUAL</span><span>Los datos que no encajan en las variables del modelo van al dataset de calificadores suplementarios (sección 8.4).</span></li>
+    <li><span class="ok">Coherencia</span><span>Todo dato recogido que esté en un dataset de análisis debe aparecer también en un dataset de tabulación.</span></li>
+  </ul>
+  <p class="hint">El paradigma V3.x es muy distinto del anterior: datos que antes iban en horizontal en un solo registro ahora suelen convertirse en varios registros.</p>
+</section>
+
+<!-- ============ 2.6 ============ -->
+<section id="s26">
+  <span class="num">2.6</span>
+  <h2>Crear un dominio nuevo</h2>
+  <p>Solo se crea un dominio nuevo si no existe ya uno publicado para esos datos. La decisión más importante es elegir la clase general adecuada. La guía define 14 pasos:</p>
+  <div class="fases" id="fases"></div>
+
+  <h3>2.6.1 Qué variables puede incluir (pasos 4 a 7)</h3>
+  <p>Todo dominio nuevo hereda las variables identificadoras y de tiempo. Las de tema y calificadores solo pueden venir de <b>su</b> clase general. Elige la clase del dominio nuevo:</p>
+  <div class="panel">
+    <div class="tabs" id="ntabs" role="group" aria-label="Clase del dominio nuevo"></div>
+    <div class="flujo" id="flujo"></div>
+  </div>
+</section>
+
+<!-- ============ Cuestionario ============ -->
+<section id="quiz">
+  <h2>Comprueba lo aprendido</h2>
+  <div class="quiz" id="quizBox"></div>
+  <span class="score" id="score" aria-live="polite"></span>
+</section>
+
+<footer>Material de estudio basado en el capítulo 2 «Fundamentals of the SDTM» de la SDTM Implementation Guide v3.1.1 (CDISC, 2005). Los valores de los ejemplos son ilustrativos.</footer>
+</main>
+
+<script>
+const T = {
+  rolLabel: "Rol",
+  ae: {
+    DOMAIN:{r:'id',rol:'Identificador',t:'Guarda el código de dos caracteres del dominio. Todas las filas de este dataset llevan «AE».'},
+    USUBJID:{r:'id',rol:'Identificador',t:'«El sujeto 101» identifica a quién pertenece la observación. Se guarda 101.'},
+    AESEQ:{r:'id',rol:'Identificador',t:'El número de secuencia distingue este registro de los demás del mismo sujeto en el dominio.'},
+    AETERM:{r:'topic',rol:'Tema (Topic)',t:'«Náuseas» es el término del evento adverso: el foco de la observación. Se guarda NAUSEA.'},
+    AESEV:{r:'qual',rol:'Calificador de registro',t:'«Leves» es la severidad. Describe el registro en su conjunto. Se guarda MILD.'},
+    AESTDY:{r:'timing',rol:'Tiempo (Timing)',t:'«A partir del Día 6 del estudio» es el día de inicio del evento. Se guarda 6.'}
+  },
+  qPrefix: "Calificador ",
+  q: [
+    {n:'De agrupación',d:'Agrupan un conjunto de observaciones dentro del mismo dominio.',ex:'Ejemplos: --CAT y --SCAT.',on:['LBCAT'],ref:[]},
+    {n:'De resultado',d:'Describen el resultado concreto asociado a la variable de tema en un hallazgo. Son la respuesta a la pregunta que plantea el tema.',ex:'Ejemplos: --ORRES, --STRESC y --STRESN. Muchos valores del dominio DM también son calificadores de resultado.',on:['LBORRES'],ref:['LBTESTCD']},
+    {n:'Sinónimo',d:'Dan un nombre alternativo a una variable concreta de la observación.',ex:'Ejemplos: --MODIFY y --DECOD equivalen a --TRT o --TERM; --TEST y --LOINC equivalen a --TESTCD.',on:['LBTEST'],ref:['LBTESTCD']},
+    {n:'De registro',d:'Definen atributos del registro en su conjunto, no de una variable concreta.',ex:'Ejemplos: --REASND, AESLIFE y las demás marcas de gravedad de AE; --BLFL, --POS, --LOC, --SPEC, --LOT y --NAM.',on:['LBSPEC','LBBLFL'],ref:[]},
+    {n:'De variable',d:'Modifican o describen una variable concreta y solo tienen sentido junto a ella.',ex:'Ejemplos: --ORRESU, --ORNRHI y --ORNRLO califican a --ORRES; --DOSU y --DOSFRM califican a --DOSE.',on:['LBORRESU','LBORNRLO','LBORNRHI'],ref:['LBORRES']}
+  ],
+  d: [['AE','Eventos adversos','TERM'],['CM','Medicación concomitante','TRT'],['LB','Pruebas de laboratorio','TESTCD'],['VS','Signos vitales','TESTCD']],
+  clases: [
+    {n:'Intervenciones',k:'int',t:'Tratamientos en investigación, tratamientos terapéuticos y procedimientos quirúrgicos administrados intencionadamente al sujeto, con algún efecto fisiológico real o esperado.',ej:[['EX','según el protocolo («exposición»)'],['CM','durante el periodo del estudio («medicación concomitante»)'],['SU','autoadministradas, como alcohol, tabaco o cafeína']],tema:'--TRT'},
+    {n:'Eventos',k:'eve',t:'Sucesos o incidentes independientes de las evaluaciones planificadas, ocurridos durante el ensayo o antes de él.',ej:[['AE','eventos adversos'],['DS','disposición del sujeto'],['MH','historia médica, previa al ensayo']],tema:'--TERM'},
+    {n:'Hallazgos',k:'hal',t:'Observaciones que resultan de evaluaciones planificadas para responder preguntas concretas.',ej:[['PE','exploración física'],['LB','pruebas de laboratorio'],['EG','electrocardiogramas'],['QS','preguntas de cuestionarios']],tema:'--TESTCD'}
+  ],
+  grupos: [
+    {n:'Propósito especial',k:'esp',doms:[['DM','Demographics'],['CO','Comments']]},
+    {n:'Intervenciones',k:'int',doms:[['CM','Concomitant Medications'],['EX','Exposure'],['SU','Substance Use']]},
+    {n:'Eventos',k:'eve',doms:[['AE','Adverse Events'],['DS','Disposition'],['MH','Medical History'],['DV*','Protocol Deviations']]},
+    {n:'Hallazgos',k:'hal',doms:[['DA*','Drug Accountability'],['EG','ECG Tests'],['IE','Inclusion/Exclusion Exceptions'],['LB','Laboratory Tests'],['MB*','Microbiology Specimens'],['MS*','Microbiology Susceptibility'],['PC*','Pharmacokinetics Concentrations'],['PP*','Pharmacokinetics Parameters'],['PE','Physical Examinations'],['QS','Questionnaires'],['SC','Subject Characteristics'],['VS','Vital Signs']]},
+    {n:'Diseño del ensayo',k:'dis',doms:[['TE','Trial Elements'],['TA','Trial Arms'],['TV','Trial Visits'],['SE','Subject Elements'],['SV','Subject Visits'],['TI','Trial Inclusion/Exclusion Criteria'],['TS','Trial Summary']]},
+    {n:'Relaciones',k:'rel',doms:[['SUPPQUAL','Supplemental Qualifiers'],['RELREC','Related Records']]}
+  ],
+  todos: 'Todos',
+  grupoDe: 'Grupo',
+  fases: [
+    {n:'Decidir', pasos:[
+      'Asegurarse de que hace falta un dominio nuevo. La estructura vertical de Hallazgos, por ejemplo, admite muchos tipos de información como registros distintos de un mismo dominio.',
+      'Comprobar en la web de CDISC que no existe ya un modelo para esos datos.',
+      'Elegir la clase general (Intervenciones, Eventos o Hallazgos): identificar el tema y la clase más parecida; si ya hay en el envío un dominio con el mismo tema y clase, usar ese; buscar un modelo existente que sirva de prototipo (la mayoría seguirán Hallazgos); comprobar que la clase tiene los calificadores requeridos y esperados; seleccionar las variables.']},
+    {n:'Variables', pasos:[
+      'Incluir las variables identificadoras (USUBJID, STUDYID y --SEQ).',
+      'Incluir la variable de tema de la clase elegida (por ejemplo, --TESTCD en Hallazgos).',
+      'Incluir los calificadores relevantes de esa clase, omitiendo los que no aplican.',
+      'Incluir las variables de tiempo aplicables del SDTM.']},
+    {n:'Código', pasos:[
+      'Buscar en la web de CDISC un código de dos caracteres ya asignado. Si no existe, el patrocinador elige uno único y lo usa en todo el envío.',
+      'Aplicar el código a las variables: sustituir los dos guiones «--» del modelo por el código del dominio.']},
+    {n:'Ajustar', pasos:[
+      'Ordenar las variables como en el modelo de dominio más parecido.',
+      'Adaptar las etiquetas solo cuando haga falta para transmitir su significado, en Title Case (mayúscula inicial en cada palabra salvo artículos, preposiciones y conjunciones).',
+      'Comparar con las suposiciones generales de CDISC y con dominios similares, para no crear variables que ya existen.',
+      'Etiquetar el dataset en Define así: <nombre del dominio>, <clase>, CDISC SDTM Version <versión>, <estructura, p. ej. «one record per subject»>.']},
+    {n:'Proponer', pasos:[
+      'Solicitar en el foro público de CDISC que se añadan las variables nuevas necesarias a las clases generales.']}
+  ],
+  paso: 'Paso',
+  nuevo: {
+    titulo: 'Dominio nuevo',
+    filas: [['Identificadoras','siempre','id'],['De tiempo','siempre','timing'],['Tema y calificadores de Intervenciones','int','int'],['Tema y calificadores de Eventos','eve','eve'],['Tema y calificadores de Hallazgos','hal','hal']],
+    si: 'Se incluyen', no: 'No permitido'
+  },
+  quiz: [
+    ['En un dataset SDTM, ¿a qué corresponde una observación?',['A una columna','A una fila','A un dominio completo'],1,'Las observaciones son filas; las variables son columnas.'],
+    ['En el ejemplo de las náuseas, ¿qué rol tiene el valor MILD?',['Tema','Tiempo','Calificador de registro'],2,'La severidad describe el registro en su conjunto.'],
+    ['--CAT y --SCAT son calificadores…',['de agrupación','de resultado','sinónimos'],0,'Agrupan observaciones dentro del mismo dominio.'],
+    ['¿Cuál NO es un uso del código DOMAIN según la guía?',['Nombre del dataset','Prefijo de las variables','Etiqueta de la variable'],2,'Se usa en el nombre del dataset, como valor de DOMAIN y como prefijo de las variables.'],
+    ['¿Se pueden añadir calificadores al dominio DM?',['Sí, de cualquier clase','No: es de propósito especial y tiene estructura fija','Solo de tiempo'],1,'Los dominios de propósito especial no se pueden ampliar.'],
+    ['Los resultados de laboratorio pertenecen a la clase…',['Intervenciones','Eventos','Hallazgos'],2,'Resultan de evaluaciones planificadas: son Hallazgos.'],
+    ['¿Qué variables puede añadir el patrocinador a un dominio estándar?',['Cualquiera, si la documenta en Define','Solo variables de tiempo y calificadores de la misma clase general','Ninguna'],1,'El resto de datos va a SUPPQUAL.'],
+    ['Un dominio nuevo de Hallazgos, ¿puede llevar calificadores de Eventos?',['Sí','No'],1,'Tema y calificadores solo pueden venir de su propia clase general.']
+  ],
+  correcto: 'Correcto. ', incorrecto: 'No es esa. ',
+  aciertos: (g,d,n) => 'Aciertos: '+g+' de '+d+(d===n?' · Cuestionario completado':'')
+};
+</script>
+<script src="../recursos/leccion-sdtmig.js?v=3"></script>
+</body>
+</html>

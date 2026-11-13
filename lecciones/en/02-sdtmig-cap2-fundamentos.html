@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SDTMIG 3.1.1 · Ch. 2 Fundamentals of the SDTM</title>
+<link rel="stylesheet" href="../../recursos/estilo.css?v=3">
+<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=3">
+<script src="../../recursos/controles.js?v=3"></script>
+</head>
+<body>
+<main>
+
+<section>
+  <span class="eyebrow">CDISC SDTMIG v3.1.1 · Chapter 2</span>
+  <h1>Fundamentals of the SDTM</h1>
+  <p class="lead">The implementation guide sums up the model's basic ideas in six sections: what an observation is, how observations are grouped into domains, which kinds of domain exist and how to create a new one.</p>
+  <nav aria-label="Contents">
+    <a href="#s21">2.1 Observations and variables</a><a href="#s22">2.2 Datasets and domains</a><a href="#s23">2.3 Special-purpose</a><a href="#s24">2.4 General classes</a><a href="#s25">2.5 Standard models</a><a href="#s26">2.6 Creating a domain</a><a href="#quiz">Check your knowledge</a>
+  </nav>
+</section>
+
+<!-- ============ 2.1 ============ -->
+<section id="s21">
+  <span class="num">2.1</span>
+  <h2>Observations and variables</h2>
+  <p>The SDTM is built around the <b>observations</b> collected about the subjects in a study. Each observation is described by a series of <b>variables</b> and corresponds to a row in a dataset or table.</p>
+  <div class="eq">
+    <div><b>Observation</b><i>= a row</i><span>A piece of data collected about a study subject.</span></div>
+    <div><b>Variable</b><i>= a column</i><span>Describes the observation. Every variable is classified by its Role.</span></div>
+  </div>
+
+  <h3>Variable roles</h3>
+  <p>The Role states what kind of information the variable conveys about each observation and how it can be used. There are four major roles, plus a fifth one, Rule, introduced in V3.1.</p>
+  <div class="roles">
+    <div class="role r-id"><h3>Identifier</h3><span class="q">Whose record is it, and which one?</span><span>Identifies the study, the subject, the domain and the sequence number of the record.</span><span><span class="tag">STUDYID</span> <span class="tag">USUBJID</span> <span class="tag">DOMAIN</span> <span class="tag">--SEQ</span></span></div>
+    <div class="role r-topic"><h3>Topic</h3><span class="q">What is it about?</span><span>Specifies the focus of the observation, such as the name of a lab test.</span><span><span class="tag">--TRT</span> <span class="tag">--TERM</span> <span class="tag">--TESTCD</span></span></div>
+    <div class="role r-timing"><h3>Timing</h3><span class="q">When did it happen?</span><span>Describes the timing of the observation, such as start date and end date.</span><span><span class="tag">--STDTC</span> <span class="tag">--ENDTC</span> <span class="tag">--STDY</span></span></div>
+    <div class="role r-qual"><h3>Qualifier</h3><span class="q">What else do we know?</span><span>Text or numeric values that describe the results or additional traits, such as units or descriptive adjectives.</span><span><span class="tag">--ORRES</span> <span class="tag">--SEV</span> <span class="tag">--ORRESU</span></span></div>
+    <div class="role r-rule"><h3>Rule</h3><span class="q">When does it start, end or repeat?</span><span>Expresses an algorithm or executable method to define start, end or looping conditions in the Trial Design model.</span></div>
+  </div>
+
+  <h3>Anatomy of an observation</h3>
+  <p>The guide uses this Adverse Events example. Click each part of the sentence, or each column, to see which variable stores it and which role it plays.</p>
+  <div class="panel">
+    <div class="sentence" id="sentence">
+      <button class="seg r-id" data-k="USUBJID">Subject 101</button> had
+      <button class="seg r-qual" data-k="AESEV">mild</button>
+      <button class="seg r-topic" data-k="AETERM">nausea</button>
+      <button class="seg r-timing" data-k="AESTDY">starting on Study Day 6</button>
+    </div>
+    <div class="scroll">
+      <table id="aeTable" aria-label="The observation as a row of the AE dataset">
+        <tr><th data-k="DOMAIN">DOMAIN</th><th data-k="USUBJID">USUBJID</th><th data-k="AESEQ">AESEQ</th><th data-k="AETERM">AETERM</th><th data-k="AESEV">AESEV</th><th data-k="AESTDY">AESTDY</th></tr>
+        <tr><td data-k="DOMAIN">AE</td><td data-k="USUBJID">101</td><td data-k="AESEQ">1</td><td data-k="AETERM">NAUSEA</td><td data-k="AESEV">MILD</td><td data-k="AESTDY">6</td></tr>
+      </table>
+    </div>
+    <div class="explain" id="explain" aria-live="polite"></div>
+    <span class="hint">Additional timing and qualifier variables can be included when needed to describe the observation adequately.</span>
+  </div>
+
+  <h3>The five qualifier subclasses</h3>
+  <p>Pick a subclass to see its definition and which columns of this lab record belong to it. The two hyphens in <code>--ORRES</code> are replaced with the domain code: in LB it is <code>LBORRES</code>.</p>
+  <div class="panel">
+    <div class="tabs" id="qtabs" role="group" aria-label="Qualifier subclasses"></div>
+    <div><h3 id="qtitle"></h3><p id="qdesc"></p></div>
+    <p class="hint" id="qex"></p>
+    <div class="scroll">
+      <table id="lbTable" aria-label="Example record from the LB domain">
+        <tr><th data-v="LBTESTCD">LBTESTCD<small>Topic</small></th><th data-v="LBTEST">LBTEST</th><th data-v="LBCAT">LBCAT</th><th data-v="LBORRES">LBORRES</th><th data-v="LBORRESU">LBORRESU</th><th data-v="LBORNRLO">LBORNRLO</th><th data-v="LBORNRHI">LBORNRHI</th><th data-v="LBSPEC">LBSPEC</th><th data-v="LBBLFL">LBBLFL</th></tr>
+        <tr><td data-v="LBTESTCD">GLUC</td><td data-v="LBTEST">Glucose</td><td data-v="LBCAT">CHEMISTRY</td><td data-v="LBORRES">98</td><td data-v="LBORRESU">mg/dL</td><td data-v="LBORNRLO">70</td><td data-v="LBORNRHI">99</td><td data-v="LBSPEC">SERUM</td><td data-v="LBBLFL">Y</td></tr>
+      </table>
+    </div>
+    <span class="hint">Green: variables in the selected subclass. Grey border: the variable they refer to. Values are illustrative.</span>
+  </div>
+</section>
+
+<!-- ============ 2.2 ============ -->
+<section id="s22">
+  <span class="num">2.2</span>
+  <h2>Datasets and domains</h2>
+  <p>A <b>domain</b> is a collection of logically related observations with a common topic. Each domain is normally submitted as one <b>dataset</b>: a flat file in which each row is an observation and each column a variable.</p>
+
+  <h3>The DOMAIN code</h3>
+  <p>Each dataset is distinguished by a unique two-character code that should be used consistently throughout the submission. Switch domains to see its three uses.</p>
+  <div class="panel">
+    <div class="pick" id="dpick" role="group" aria-label="Domain"><span class="hint">Domain:</span></div>
+    <span class="hint" id="dname"></span>
+    <div class="uses">
+      <div><span>1. Dataset name</span><b id="u1"></b></div>
+      <div><span>2. Value of the DOMAIN variable</span><b id="u2"></b></div>
+      <div><span>3. Prefix of most variable names</span><b id="u3"></b><em id="u3b"></em></div>
+    </div>
+  </div>
+
+  <h3>Metadata: the “Define” document</h3>
+  <p>Each dataset comes with a data definition document, “Define” (define.xml), that describes its variables using seven attributes. Here they are applied to <code>AETERM</code>:</p>
+  <div class="panel scroll">
+    <table class="meta" aria-label="The seven metadata attributes">
+      <tr><th>Attribute</th><th>Example</th><th>What the guide says</th></tr>
+      <tr><td>Name</td><td>AETERM</td><td>Up to 8 characters, for compatibility with SAS Transport.</td></tr>
+      <tr><td>Label</td><td>Reported Term for the Adverse Event</td><td>Descriptive, up to 40 characters, unique within the dataset.</td></tr>
+      <tr><td>Type</td><td>Char</td><td>Character or numeric.</td></tr>
+      <tr><td>Controlled terms or format</td><td>**</td><td>Controlled terminology or display format. <b>*</b> = sponsor-defined list; <b>**</b> = external source such as MedDRA.</td></tr>
+      <tr><td>Origin</td><td>CRF</td><td>Where the variable comes from.</td></tr>
+      <tr><td>Role</td><td><span class="tag r-topic">Topic</span></td><td>Identifier, Topic, Timing or one of the five qualifiers. Already predefined for domains in the general classes.</td></tr>
+      <tr><td>Comments</td><td>Free text</td><td>Any relevant information about the variable or its data.</td></tr>
+    </table>
+  </div>
+  <div class="two">
+    <div><h3>Raw and derived data</h3><span>Variables hold values as originally collected and derived values, such as a conversion to standard units or an average.</span></div>
+    <div><h3>SDTM vs. the guide</h3><span>The SDTM only fixes name, label and type. The guide's domain models (sections 5 and 6) add controlled terms, origin and usage notes.</span></div>
+  </div>
+</section>
+
+<!-- ============ 2.3 ============ -->
+<section id="s23">
+  <span class="num">2.3</span>
+  <h2>Special-purpose domains</h2>
+  <p>They have a <b>fixed structure</b>: they cannot be extended with qualifier or timing variables other than those specified.</p>
+  <div class="cards">
+    <div class="card c-esp"><span class="code">DM</span><h3>Demographics</h3><span>A set of standard variables describing each subject in the study.</span><span class="hint">Section 5 of the guide</span></div>
+    <div class="card c-esp"><span class="code">CO</span><h3>Comments</h3><span>A fixed structure for free-text comments about a subject or about records in other domains.</span><span class="hint">Section 5 of the guide</span></div>
+    <div class="card c-dis"><span class="code">TA · TE · TV…</span><h3>Trial design</h3><span>Fixed-structure datasets describing the design of the study.</span><span class="hint">Section 7 of the guide</span></div>
+    <div class="card c-rel"><span class="code">SUPPQUAL · RELREC</span><h3>Relationships</h3><span>Fixed-structure datasets to relate records and add non-standard qualifiers.</span><span class="hint">Section 8 of the guide</span></div>
+  </div>
+</section>
+
+<!-- ============ 2.4 ============ -->
+<section id="s24">
+  <span class="num">2.4</span>
+  <h2>The general domain classes</h2>
+  <p>All other observations are divided among three <b>general classes</b>. Pick one to see what it captures.</p>
+  <div class="panel">
+    <div class="tabs" id="ctabs" role="group" aria-label="General classes"></div>
+    <div class="clase" id="clase" aria-live="polite"></div>
+  </div>
+  <p>In most cases the class follows easily from the topic. Findings is often the best choice for measurements or responses to questions. When it is not clear, the choice is based on the scientific intent of the protocol, the analysis plan or the data structure (Appendix 10.6).</p>
+  <h3>Three common rules</h3>
+  <ul class="rules">
+    <li><span class="ok">Identifiers</span><span>The same set of identifier variables applies to all domains based on the general classes.</span></li>
+    <li><span class="ok">Timing</span><span>Any valid timing variable may be used in any dataset, but consistently across all domains.</span></li>
+    <li><span class="ok">Qualifiers</span><span>Any additional qualifier from the same general class may be added to a domain model.</span></li>
+  </ul>
+</section>
+
+<!-- ============ 2.5 ============ -->
+<section id="s25">
+  <span class="num">2.5</span>
+  <h2>The standard domain models</h2>
+  <p>These are the domains defined or referenced in the guide. Filter by group and click a code to see its name.</p>
+  <div class="panel">
+    <div class="tabs" id="gtabs" role="group" aria-label="Domain groups"></div>
+    <div class="doms" id="doms"></div>
+    <div class="explain r-qual" id="domInfo" aria-live="polite"></div>
+    <span class="hint">* Not included in this version of the guide; to be posted separately for comment.</span>
+  </div>
+  <h3>What the sponsor may and may not do</h3>
+  <ul class="rules">
+    <li><span class="ok">Only collected</span><span>Submit only the domains whose data were actually collected in the study.</span></li>
+    <li><span class="ok">Allowed</span><span>Add relevant timing variables and qualifiers from the same general class, and drop variables from the model (with their description in Define).</span></li>
+    <li><span class="no">Not allowed</span><span>Add any other new variables, rename existing ones or use them for a different purpose.</span></li>
+    <li><span class="ok">SUPPQUAL</span><span>Data that do not fit the model's variables go into the Supplemental Qualifiers dataset (Section 8.4).</span></li>
+    <li><span class="ok">Consistency</span><span>Any collected data in an analysis dataset must also appear in a tabulation dataset.</span></li>
+  </ul>
+  <p class="hint">The V3.x paradigm is very different from earlier versions: data once modeled horizontally in a single record are now often converted into multiple records.</p>
+</section>
+
+<!-- ============ 2.6 ============ -->
+<section id="s26">
+  <span class="num">2.6</span>
+  <h2>Creating a new domain</h2>
+  <p>A new domain is created only when no published domain already exists for the data. The key decision is choosing the right general class. The guide defines 14 steps:</p>
+  <div class="fases" id="fases"></div>
+
+  <h3>2.6.1 Which variables it may include (steps 4 to 7)</h3>
+  <p>Every new domain inherits the identifier and timing variables. Topic and qualifier variables may only come from <b>its</b> general class. Pick the class of the new domain:</p>
+  <div class="panel">
+    <div class="tabs" id="ntabs" role="group" aria-label="Class of the new domain"></div>
+    <div class="flujo" id="flujo"></div>
+  </div>
+</section>
+
+<!-- ============ Quiz ============ -->
+<section id="quiz">
+  <h2>Check your knowledge</h2>
+  <div class="quiz" id="quizBox"></div>
+  <span class="score" id="score" aria-live="polite"></span>
+</section>
+
+<footer>Study material based on chapter 2 “Fundamentals of the SDTM” of the SDTM Implementation Guide v3.1.1 (CDISC, 2005). Example values are illustrative.</footer>
+</main>
+
+<script>
+const T = {
+  ae: {
+    DOMAIN:{r:'id',rol:'Identifier',t:'Stores the two-character domain code. Every row in this dataset has “AE”.'},
+    USUBJID:{r:'id',rol:'Identifier',t:'“Subject 101” identifies whom the observation belongs to. 101 is stored.'},
+    AESEQ:{r:'id',rol:'Identifier',t:'The sequence number distinguishes this record from the subject’s other records in the domain.'},
+    AETERM:{r:'topic',rol:'Topic',t:'“Nausea” is the adverse event term: the focus of the observation. NAUSEA is stored.'},
+    AESEV:{r:'qual',rol:'Record qualifier',t:'“Mild” is the severity. It describes the record as a whole. MILD is stored.'},
+    AESTDY:{r:'timing',rol:'Timing',t:'“Starting on Study Day 6” is the study day the event began. 6 is stored.'}
+  },
+  qPrefix: "",
+  q: [
+    {n:'Grouping',d:'Group together a collection of observations within the same domain.',ex:'Examples: --CAT and --SCAT.',on:['LBCAT'],ref:[]},
+    {n:'Result',d:'Describe the specific results associated with the topic variable for a finding. They are the answer to the question raised by the topic.',ex:'Examples: --ORRES, --STRESC and --STRESN. Many of the values in the DM domain are also result qualifiers.',on:['LBORRES'],ref:['LBTESTCD']},
+    {n:'Synonym',d:'Specify an alternative name for a particular variable in an observation.',ex:'Examples: --MODIFY and --DECOD are equivalent to --TRT or --TERM; --TEST and --LOINC are equivalent to --TESTCD.',on:['LBTEST'],ref:['LBTESTCD']},
+    {n:'Record',d:'Define additional attributes of the record as a whole, rather than of a particular variable.',ex:'Examples: --REASND, AESLIFE and all other SAE flags in AE; --BLFL, --POS, --LOC, --SPEC, --LOT and --NAM.',on:['LBSPEC','LBBLFL'],ref:[]},
+    {n:'Variable',d:'Further modify or describe a specific variable and are only meaningful in its context.',ex:'Examples: --ORRESU, --ORNRHI and --ORNRLO qualify --ORRES; --DOSU and --DOSFRM qualify --DOSE.',on:['LBORRESU','LBORNRLO','LBORNRHI'],ref:['LBORRES']}
+  ],
+  d: [['AE','Adverse Events','TERM'],['CM','Concomitant Medications','TRT'],['LB','Laboratory Tests','TESTCD'],['VS','Vital Signs','TESTCD']],
+  temaLabel: 'Typical topic variable: ',
+  clases: [
+    {n:'Interventions',k:'int',t:'Investigational treatments, therapeutic treatments and surgical procedures intentionally administered to the subject, with some actual or expected physiological effect.',ej:[['EX','as specified by the protocol (“exposure”)'],['CM','coincident with the study period (“concomitant medications”)'],['SU','self-administered, such as alcohol, tobacco or caffeine']],tema:'--TRT'},
+    {n:'Events',k:'eve',t:'Occurrences or incidents independent of planned study evaluations, during the trial or prior to it.',ej:[['AE','adverse events'],['DS','disposition'],['MH','medical history, prior to the trial']],tema:'--TERM'},
+    {n:'Findings',k:'hal',t:'Observations resulting from planned evaluations to address specific questions.',ej:[['PE','physical examination'],['LB','laboratory tests'],['EG','ECG testing'],['QS','questionnaire questions']],tema:'--TESTCD'}
+  ],
+  grupos: [
+    {n:'Special-purpose',k:'esp',doms:[['DM','Demographics'],['CO','Comments']]},
+    {n:'Interventions',k:'int',doms:[['CM','Concomitant Medications'],['EX','Exposure'],['SU','Substance Use']]},
+    {n:'Events',k:'eve',doms:[['AE','Adverse Events'],['DS','Disposition'],['MH','Medical History'],['DV*','Protocol Deviations']]},
+    {n:'Findings',k:'hal',doms:[['DA*','Drug Accountability'],['EG','ECG Tests'],['IE','Inclusion/Exclusion Exceptions'],['LB','Laboratory Tests'],['MB*','Microbiology Specimens'],['MS*','Microbiology Susceptibility'],['PC*','Pharmacokinetics Concentrations'],['PP*','Pharmacokinetics Parameters'],['PE','Physical Examinations'],['QS','Questionnaires'],['SC','Subject Characteristics'],['VS','Vital Signs']]},
+    {n:'Trial design',k:'dis',doms:[['TE','Trial Elements'],['TA','Trial Arms'],['TV','Trial Visits'],['SE','Subject Elements'],['SV','Subject Visits'],['TI','Trial Inclusion/Exclusion Criteria'],['TS','Trial Summary']]},
+    {n:'Relationships',k:'rel',doms:[['SUPPQUAL','Supplemental Qualifiers'],['RELREC','Related Records']]}
+  ],
+  todos: 'All',
+  grupoDe: 'Group',
+  fases: [
+    {n:'Decide', pasos:[
+      'Ensure there is a definite need for a new domain. The Findings vertical structure, for example, can hold many types of information as separate records in the same domain.',
+      'Verify on the CDISC website that no existing domain model covers the data.',
+      'Choose the general class (Interventions, Events or Findings): identify the topic and the closest class; if the submission already has a domain with the same topic and class, use it; look for an existing model to use as a prototype (most will follow Findings); check that the class has most of the required and expected qualifiers; select the variables.']},
+    {n:'Variables', pasos:[
+      'Include the identifier variables (USUBJID, STUDYID and --SEQ).',
+      'Include the topic variable from the chosen class (e.g. --TESTCD for Findings).',
+      'Include the relevant qualifiers from that class, omitting those that do not apply.',
+      'Include the applicable timing variables from the SDTM.']},
+    {n:'Code', pasos:[
+      'Check the CDISC website for an assigned two-character code. If there is none, the sponsor picks a unique one and uses it throughout the submission.',
+      'Apply the code to the variables: replace the two hyphens “--” in the model with the domain code.']},
+    {n:'Adjust', pasos:[
+      'Order the variables as in the most similar domain model.',
+      'Adjust labels only where needed to convey their meaning, using title case (capitalize every word except articles, prepositions and conjunctions).',
+      'Compare with the CDISC General Assumptions and similar domains, so no variable is created when a standard one already exists.',
+      'Label the dataset in Define as: <domain name>, <class>, CDISC SDTM Version <version>, <structure, e.g. “one record per subject”>.']},
+    {n:'Propose', pasos:[
+      'Request, on the CDISC Public Discussion Forum, that the new variables needed be added to the general classes.']}
+  ],
+  paso: 'Step',
+  nuevo: {
+    titulo: 'New domain',
+    filas: [['Identifier variables','siempre','id'],['Timing variables','siempre','timing'],['Interventions topic and qualifiers','int','int'],['Events topic and qualifiers','eve','eve'],['Findings topic and qualifiers','hal','hal']],
+    si: 'Included', no: 'Not allowed'
+  },
+  quiz: [
+    ['In an SDTM dataset, what does an observation correspond to?',['A column','A row','A whole domain'],1,'Observations are rows; variables are columns.'],
+    ['In the nausea example, what role does the value MILD have?',['Topic','Timing','Record qualifier'],2,'Severity describes the record as a whole.'],
+    ['--CAT and --SCAT are…',['grouping qualifiers','result qualifiers','synonym qualifiers'],0,'They group observations within the same domain.'],
+    ['Which is NOT a use of the DOMAIN code according to the guide?',['Dataset name','Variable name prefix','Variable label'],2,'It is used in the dataset name, as the DOMAIN value and as the variable prefix.'],
+    ['Can qualifiers be added to the DM domain?',['Yes, from any class','No: it is special-purpose with a fixed structure','Only timing ones'],1,'Special-purpose domains cannot be extended.'],
+    ['Lab results belong to which class?',['Interventions','Events','Findings'],2,'They result from planned evaluations: Findings.'],
+    ['Which variables may the sponsor add to a standard domain?',['Any, if documented in Define','Only timing variables and qualifiers from the same general class','None'],1,'Everything else goes into SUPPQUAL.'],
+    ['Can a new Findings domain include Events qualifiers?',['Yes','No'],1,'Topic and qualifiers may only come from its own general class.']
+  ],
+  correcto: 'Correct. ', incorrecto: 'Not quite. ',
+  aciertos: (g,d,n) => 'Score: '+g+' of '+d+(d===n?' · Quiz complete':'')
+};
+</script>
+<script src="../../recursos/leccion-sdtmig.js?v=3"></script>
+</body>
+</html>

@@ -12,6 +12,7 @@ lecciones/              → lecciones en español
 lecciones/en/           → versión en inglés (mismo nombre de archivo que en español)
 recursos/estilo.css     → estilo común "Mosaico" (colores, tipografía, tema claro/oscuro)
 recursos/controles.js   → botones de idioma (ES/EN) y tema (claro/oscuro)
+recursos/leccion-sdtmig.css/.js → diseño y lógica de la lección SDTMIG cap. 2 (compartidos ES/EN)
 guia-de-estilo.html     → propuestas de estilo visual para las lecciones
 .nojekyll               → indica a GitHub Pages que sirva los archivos tal cual
 ```
