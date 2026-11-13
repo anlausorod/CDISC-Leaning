@@ -46,8 +46,35 @@
   }
   showD(0);
 
-  /* 2.4 Clases generales */
-  grupoBotones($("#ctabs"), T.clases.map(c => c.n), i => {
+  /* 2.1 Explorador: dominio / observación / variable / valor */
+  if ($("#xtabs")) grupoBotones($("#xtabs"), T.x.map(m => m.n), i => {
+    const m = T.x[i];
+    $("#xwrap").dataset.modo = m.k;
+    // En pantallas estrechas, desplaza la tabla para que se vea la columna o celda resaltada
+    const sc = $("#xwrap .scroll"), cel = $("#xwrap .celda-sel");
+    if (sc && cel) sc.scrollLeft = (m.k === "var" || m.k === "val") ? Math.max(0, cel.offsetLeft - sc.clientWidth / 2 + cel.offsetWidth / 2) : 0;
+    const e = $("#xinfo"); e.className = "explain x-" + m.k; e.innerHTML = "";
+    e.append(el("b", null, m.t), el("br"), document.createTextNode(m.d));
+  })(0);
+
+  /* 2.4 Clasificador: ¿a qué clase pertenece? */
+  if ($("#sorter")) T.clasifica.forEach(([txt, c, why]) => {
+    const box = el("div", "srt"), opts = el("div", "opts"), fb = el("div", "fb");
+    box.append(el("p", null, txt), opts, fb);
+    T.clases.forEach((cl, j) => {
+      const b = el("button", "c-" + cl.k, cl.n); b.type = "button";
+      b.onclick = () => {
+        if (box.dataset.done) return; box.dataset.done = 1;
+        b.classList.add(j === c ? "right" : "wrong"); opts.children[c].classList.add("right");
+        fb.textContent = (j === c ? T.correcto : T.incorrecto) + why;
+      };
+      opts.append(b);
+    });
+    $("#sorter").append(box);
+  });
+
+  /* 2.4 Clases generales (pestañas, si existen) */
+  if ($("#ctabs")) grupoBotones($("#ctabs"), T.clases.map(c => c.n), i => {
     const c = T.clases[i], box = $("#clase");
     box.className = "clase c-" + c.k; box.innerHTML = "";
     const ej = el("div", "ejemplos");

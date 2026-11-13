@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDTMIG 3.1.1 · Ch. 2 Fundamentals of the SDTM</title>
-<link rel="stylesheet" href="../../recursos/estilo.css?v=3">
-<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=3">
-<script src="../../recursos/controles.js?v=3"></script>
+<link rel="stylesheet" href="../../recursos/estilo.css?v=4">
+<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=4">
+<script src="../../recursos/controles.js?v=4"></script>
 </head>
 <body>
 <main>
@@ -25,9 +25,43 @@
   <span class="num">2.1</span>
   <h2>Observations and variables</h2>
   <p>The SDTM is built around the <b>observations</b> collected about the subjects in a study. Each observation is described by a series of <b>variables</b> and corresponds to a row in a dataset or table.</p>
-  <div class="eq">
-    <div><b>Observation</b><i>= a row</i><span>A piece of data collected about a study subject.</span></div>
-    <div><b>Variable</b><i>= a column</i><span>Describes the observation. Every variable is classified by its Role.</span></div>
+
+  <h3>From submission to cell</h3>
+  <p>Study data are organized in levels, one inside the other. Each box contains the next one:</p>
+  <div class="niveles" aria-label="Nested levels diagram">
+    <div class="nv nv-envio">
+      <div class="nv-cab"><span class="nv-tit">Submission</span><span class="nv-eq">= all datasets</span><span class="nv-desc">Everything delivered to the agency for one study.</span></div>
+      <div class="archivos"><span>dm.xpt</span><span class="on">ae.xpt</span><span>cm.xpt</span><span>lb.xpt</span><span>vs.xpt</span><span>…</span></div>
+      <div class="nv lv-dom">
+        <div class="nv-cab"><span class="nv-tit">AE domain</span><span class="nv-eq">= one dataset</span><span class="nv-desc">All observations on one topic (adverse events), for all subjects.</span></div>
+        <div class="nv lv-obs">
+          <div class="nv-cab"><span class="nv-tit">Observation</span><span class="nv-eq">= one row</span><span class="nv-desc">One specific fact: “subject 101 had mild nausea starting on day 6”.</span></div>
+          <div class="nv-frase">ABC · AE · 101 · 1 · NAUSEA · <b>MILD</b> · 6</div>
+          <div class="nv lv-var">
+            <div class="nv-cab"><span class="nv-tit">Variable AESEV</span><span class="nv-eq">= one column</span><span class="nv-desc">A named attribute repeated in every row. In this row its value is <b>MILD</b>.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Explore a dataset</h3>
+  <p>Click each level to see which part of the table it represents.</p>
+  <div class="panel">
+    <div class="tabs" id="xtabs" role="group" aria-label="Level"></div>
+    <div class="xwrap" id="xwrap">
+      <span class="xnombre">ae.xpt</span>
+      <div class="scroll">
+        <table aria-label="Example AE dataset">
+          <tr><th>STUDYID</th><th>DOMAIN</th><th>USUBJID</th><th>AESEQ</th><th>AETERM</th><th class="col-sel">AESEV</th><th>AESTDY</th></tr>
+          <tr class="fila-sel"><td>ABC</td><td>AE</td><td>101</td><td>1</td><td>NAUSEA</td><td class="col-sel celda-sel">MILD</td><td>6</td></tr>
+          <tr><td>ABC</td><td>AE</td><td>101</td><td>2</td><td>HEADACHE</td><td class="col-sel">MODERATE</td><td>9</td></tr>
+          <tr><td>ABC</td><td>AE</td><td>102</td><td>1</td><td>DIZZINESS</td><td class="col-sel">MILD</td><td>3</td></tr>
+          <tr><td>ABC</td><td>AE</td><td>103</td><td>1</td><td>RASH</td><td class="col-sel">SEVERE</td><td>14</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="explain" id="xinfo" aria-live="polite"></div>
   </div>
 
   <h3>Variable roles</h3>
@@ -130,18 +164,88 @@
 <section id="s24">
   <span class="num">2.4</span>
   <h2>The general domain classes</h2>
-  <p>All other observations are divided among three <b>general classes</b>. Pick one to see what it captures.</p>
-  <div class="panel">
-    <div class="tabs" id="ctabs" role="group" aria-label="General classes"></div>
-    <div class="clase" id="clase" aria-live="polite"></div>
+  <p>Every observation in a study falls into one of two big groups. Special-purpose domains have a fixed structure; everything else is split among three <b>general classes</b>, depending on the question it answers.</p>
+
+  <div class="mapa" aria-label="Map of domain classes">
+    <div class="raiz">Study observations</div>
+    <div class="linea"></div>
+    <div class="ramas">
+      <div class="rama c-esp">
+        <h3>Special-purpose</h3>
+        <span class="nota">Fixed structure: cannot be extended.</span>
+        <div class="chips"><span>DM</span><span>CO</span></div>
+        <span class="nota">Plus the trial design datasets (TA, TE, TV…) and relationship datasets (SUPPQUAL, RELREC).</span>
+      </div>
+      <div class="rama" style="--g:var(--ink)">
+        <h3>General classes</h3>
+        <span class="nota">They share identifier and timing variables; each class has its own topic and qualifiers.</span>
+        <div class="clases3">
+          <div class="cl c-int"><h4>Interventions</h4><span class="preg">What was given to the subject?</span><span class="meta2">Topic: <code>--TRT</code><br>One row per treatment</span><div class="chips"><span>CM</span><span>EX</span><span>SU</span></div></div>
+          <div class="cl c-eve"><h4>Events</h4><span class="preg">What happened to the subject?</span><span class="meta2">Topic: <code>--TERM</code><br>One row per event</span><div class="chips"><span>AE</span><span>DS</span><span>MH</span><span>DV*</span></div></div>
+          <div class="cl c-hal"><h4>Findings</h4><span class="preg">What was measured or assessed?</span><span class="meta2">Topic: <code>--TESTCD</code><br>One row per test and time point</span><div class="chips"><span>EG</span><span>IE</span><span>LB</span><span>PE</span><span>QS</span><span>SC</span><span>VS</span></div></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>In most cases the class follows easily from the topic. Findings is often the best choice for measurements or responses to questions. When it is not clear, the choice is based on the scientific intent of the protocol, the analysis plan or the data structure (Appendix 10.6).</p>
-  <h3>Three common rules</h3>
-  <ul class="rules">
-    <li><span class="ok">Identifiers</span><span>The same set of identifier variables applies to all domains based on the general classes.</span></li>
-    <li><span class="ok">Timing</span><span>Any valid timing variable may be used in any dataset, but consistently across all domains.</span></li>
-    <li><span class="ok">Qualifiers</span><span>Any additional qualifier from the same general class may be added to a domain model.</span></li>
-  </ul>
+
+  <h3>Which class does it belong to?</h3>
+  <p>All these data belong to the same subject. Classify each one:</p>
+  <div class="sorter" id="sorter"></div>
+  <p class="hint">The class usually follows from the topic. For measurements or responses to questions, Findings is often the best choice. When it is not clear, the choice is based on the intent of the protocol, the analysis plan or the data structure (Appendix 10.6).</p>
+
+  <h3>The three common rules, with examples</h3>
+  <p>These rules state which variables any domain in the general classes may include.</p>
+  <div class="reglas">
+    <div class="regla">
+      <h4><span class="n">1</span>Identifiers are the same in every domain</h4>
+      <span class="enuncia">“The same set of Identifier variables applies to all domains based on the general observation classes.”</span>
+      <div class="ejemplo"><b>Example</b>
+        <span>Subject 101 has data in three domains from different classes. The identifier columns (in purple) are the same in all three; only the --SEQ prefix changes. They are what lets you join all of a subject’s data.</span>
+        <div class="scroll"><table>
+          <tr><th class="hl">STUDYID</th><th class="hl">DOMAIN</th><th class="hl">USUBJID</th><th class="hl">--SEQ</th><th>Topic variable</th></tr>
+          <tr><td class="hl">ABC</td><td class="hl">AE</td><td class="hl">101</td><td class="hl">AESEQ = 1</td><td>AETERM = NAUSEA</td></tr>
+          <tr><td class="hl">ABC</td><td class="hl">CM</td><td class="hl">101</td><td class="hl">CMSEQ = 1</td><td>CMTRT = IBUPROFEN</td></tr>
+          <tr><td class="hl">ABC</td><td class="hl">LB</td><td class="hl">101</td><td class="hl">LBSEQ = 1</td><td>LBTESTCD = HGB</td></tr>
+        </table></div>
+        <span class="hint">An optional identifier can also be used where appropriate, e.g. --GRPID to group related records.</span>
+      </div>
+    </div>
+
+    <div class="regla">
+      <h4><span class="n">2</span>Any timing variable, but used consistently</h4>
+      <span class="enuncia">“Any valid Timing variable is permissible for use in any submission dataset, but it should be used consistently where applicable for all domains.”</span>
+      <div class="ejemplo"><b>Example</b>
+        <span>In a pharmacokinetics study, samples are drawn at precise times relative to dosing. The sponsor may use the timing variables --TPTNUM and --TPT (planned time point) in LB:</span>
+        <div class="scroll"><table>
+          <tr><th>USUBJID</th><th>LBTESTCD</th><th class="hl">VISITNUM</th><th class="hl">VISIT</th><th class="hl2">LBTPTNUM</th><th class="hl2">LBTPT</th></tr>
+          <tr><td>101</td><td>GLUC</td><td class="hl">2</td><td class="hl">WEEK 1</td><td class="hl2">1</td><td class="hl2">PRE-DOSE</td></tr>
+          <tr><td>101</td><td>GLUC</td><td class="hl">2</td><td class="hl">WEEK 1</td><td class="hl2">2</td><td class="hl2">2 H POST-DOSE</td></tr>
+        </table></div>
+        <ul class="veredicto">
+          <li><span class="s y">✓</span><span>If visit 2 is “WEEK 1” in LB, visit 2 is also “WEEK 1” in VS, EG and every other domain.</span></li>
+          <li><span class="s y">✓</span><span>Dates are written the same way in all domains (ISO 8601): LBDTC, VSDTC, AESTDTC…</span></li>
+          <li><span class="s n">✗</span><span>Calling visit 2 “WEEK 1” in LB and “VISIT 2” in VS: the data can no longer be compared.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="regla">
+      <h4><span class="n">3</span>Qualifiers may be added, but only from the same class</h4>
+      <span class="enuncia">“Any additional Qualifier variables from the same general class may be added to a domain model.”</span>
+      <div class="ejemplo"><b>Example</b>
+        <span>AE belongs to the Events class. If the CRF records where an injection site reaction appeared, the sponsor may add AELOC, because --LOC is an Events qualifier.</span>
+        <div class="scroll"><table>
+          <tr><th>USUBJID</th><th>AESEQ</th><th>AETERM</th><th>AESEV</th><th class="hl2">AELOC</th></tr>
+          <tr><td>101</td><td>3</td><td>INJECTION SITE REACTION</td><td>MILD</td><td class="hl2">LEFT ARM</td></tr>
+        </table></div>
+        <ul class="veredicto">
+          <li><span class="s y">✓</span><span><b>AELOC</b>: --LOC is an Events qualifier.</span></li>
+          <li><span class="s n">✗</span><span><b>AEORRES</b>: --ORRES is a Findings qualifier, not an Events one.</span></li>
+          <li><span class="s n">✗</span><span><b>AEPHOTO</b>: invented by the sponsor, it exists in no class. That data would go to SUPPQUAL.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ============ 2.5 ============ -->
@@ -201,6 +305,20 @@ const T = {
     AESEV:{r:'qual',rol:'Record qualifier',t:'“Mild” is the severity. It describes the record as a whole. MILD is stored.'},
     AESTDY:{r:'timing',rol:'Timing',t:'“Starting on Study Day 6” is the study day the event began. 6 is stored.'}
   },
+  x: [
+    {k:'dom',n:'Domain',t:'AE domain = the ae.xpt dataset',d:'It holds every adverse event observation for every subject: here, 4 rows from 3 subjects. Each domain is normally submitted as one dataset.'},
+    {k:'obs',n:'Observation',t:'Observation = one row',d:'“Subject 101 had mild nausea starting on day 6.” The row gathers everything known about that specific fact. Subject 101 has two observations in AE (AESEQ 1 and 2).'},
+    {k:'var',n:'Variable',t:'Variable = one column (AESEV)',d:'AESEV stores the severity in every row of the domain. It has a name, label, type and role: here, record qualifier.'},
+    {k:'val',n:'Value',t:'Value = one cell',d:'Where an observation meets a variable: the severity of subject 101’s event 1 is MILD.'}
+  ],
+  clasifica: [
+    ['Takes ibuprofen 400 mg for a headache.',0,'It is a treatment the subject receives: Interventions (CM, concomitant medications).'],
+    ['Has had a moderate headache since day 3.',1,'It is something that happens to the subject: Events (AE).'],
+    ['Systolic blood pressure: 128 mmHg at visit 2.',2,'It is a planned measurement: Findings (VS).'],
+    ['Smokes 10 cigarettes a day.',0,'It is a self-administered substance: Interventions (SU).'],
+    ['Leaves the study because of an adverse event.',1,'It is the subject’s disposition: Events (DS).'],
+    ['Hemoglobin: 13.2 g/dL.',2,'It is a lab result: Findings (LB).']
+  ],
   qPrefix: "",
   q: [
     {n:'Grouping',d:'Group together a collection of observations within the same domain.',ex:'Examples: --CAT and --SCAT.',on:['LBCAT'],ref:[]},
@@ -267,6 +385,6 @@ const T = {
   aciertos: (g,d,n) => 'Score: '+g+' of '+d+(d===n?' · Quiz complete':'')
 };
 </script>
-<script src="../../recursos/leccion-sdtmig.js?v=3"></script>
+<script src="../../recursos/leccion-sdtmig.js?v=4"></script>
 </body>
 </html>

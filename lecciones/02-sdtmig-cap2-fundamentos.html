@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDTMIG 3.1.1 · Cap. 2 Fundamentos del SDTM</title>
-<link rel="stylesheet" href="../recursos/estilo.css?v=3">
-<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=3">
-<script src="../recursos/controles.js?v=3"></script>
+<link rel="stylesheet" href="../recursos/estilo.css?v=4">
+<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=4">
+<script src="../recursos/controles.js?v=4"></script>
 </head>
 <body>
 <main>
@@ -25,9 +25,43 @@
   <span class="num">2.1</span>
   <h2>Observaciones y variables</h2>
   <p>El SDTM se construye alrededor de las <b>observaciones</b> recogidas sobre los sujetos de un estudio. Cada observación se describe con una serie de <b>variables</b>, y corresponde a una fila de un dataset o tabla.</p>
-  <div class="eq">
-    <div><b>Observación</b><i>= una fila</i><span>Un dato recogido sobre un sujeto del estudio.</span></div>
-    <div><b>Variable</b><i>= una columna</i><span>Describe la observación. Cada variable se clasifica según su Rol.</span></div>
+
+  <h3>Del envío a la celda</h3>
+  <p>Los datos de un estudio se organizan en niveles, uno dentro de otro. Cada caja contiene a la siguiente:</p>
+  <div class="niveles" aria-label="Esquema de niveles anidados">
+    <div class="nv nv-envio">
+      <div class="nv-cab"><span class="nv-tit">Envío</span><span class="nv-eq">= todos los datasets</span><span class="nv-desc">Todo lo que se entrega a la agencia para un estudio.</span></div>
+      <div class="archivos"><span>dm.xpt</span><span class="on">ae.xpt</span><span>cm.xpt</span><span>lb.xpt</span><span>vs.xpt</span><span>…</span></div>
+      <div class="nv lv-dom">
+        <div class="nv-cab"><span class="nv-tit">Dominio AE</span><span class="nv-eq">= un dataset</span><span class="nv-desc">Todas las observaciones de un mismo tema (eventos adversos), de todos los sujetos.</span></div>
+        <div class="nv lv-obs">
+          <div class="nv-cab"><span class="nv-tit">Observación</span><span class="nv-eq">= una fila</span><span class="nv-desc">Un hecho concreto: «el sujeto 101 tuvo náuseas leves a partir del día 6».</span></div>
+          <div class="nv-frase">ABC · AE · 101 · 1 · NAUSEA · <b>MILD</b> · 6</div>
+          <div class="nv lv-var">
+            <div class="nv-cab"><span class="nv-tit">Variable AESEV</span><span class="nv-eq">= una columna</span><span class="nv-desc">Un atributo con nombre que se repite en todas las filas. En esta fila su valor es <b>MILD</b>.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Explora un dataset</h3>
+  <p>Pulsa cada nivel para ver qué parte de la tabla representa.</p>
+  <div class="panel">
+    <div class="tabs" id="xtabs" role="group" aria-label="Nivel"></div>
+    <div class="xwrap" id="xwrap">
+      <span class="xnombre">ae.xpt</span>
+      <div class="scroll">
+        <table aria-label="Dataset AE de ejemplo">
+          <tr><th>STUDYID</th><th>DOMAIN</th><th>USUBJID</th><th>AESEQ</th><th>AETERM</th><th class="col-sel">AESEV</th><th>AESTDY</th></tr>
+          <tr class="fila-sel"><td>ABC</td><td>AE</td><td>101</td><td>1</td><td>NAUSEA</td><td class="col-sel celda-sel">MILD</td><td>6</td></tr>
+          <tr><td>ABC</td><td>AE</td><td>101</td><td>2</td><td>HEADACHE</td><td class="col-sel">MODERATE</td><td>9</td></tr>
+          <tr><td>ABC</td><td>AE</td><td>102</td><td>1</td><td>DIZZINESS</td><td class="col-sel">MILD</td><td>3</td></tr>
+          <tr><td>ABC</td><td>AE</td><td>103</td><td>1</td><td>RASH</td><td class="col-sel">SEVERE</td><td>14</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="explain" id="xinfo" aria-live="polite"></div>
   </div>
 
   <h3>Los roles de las variables</h3>
@@ -130,18 +164,88 @@
 <section id="s24">
   <span class="num">2.4</span>
   <h2>Las clases generales de dominio</h2>
-  <p>El resto de observaciones se reparten entre tres <b>clases generales</b>. Elige una para ver qué recoge.</p>
-  <div class="panel">
-    <div class="tabs" id="ctabs" role="group" aria-label="Clases generales"></div>
-    <div class="clase" id="clase" aria-live="polite"></div>
+  <p>Todas las observaciones de un estudio caen en uno de dos grandes grupos. Los dominios de propósito especial tienen estructura fija; el resto se reparte entre tres <b>clases generales</b>, según la pregunta que responden.</p>
+
+  <div class="mapa" aria-label="Mapa de clases de dominio">
+    <div class="raiz">Observaciones del estudio</div>
+    <div class="linea"></div>
+    <div class="ramas">
+      <div class="rama c-esp">
+        <h3>Propósito especial</h3>
+        <span class="nota">Estructura fija: no se amplía.</span>
+        <div class="chips"><span>DM</span><span>CO</span></div>
+        <span class="nota">Más los datasets de diseño del ensayo (TA, TE, TV…) y de relaciones (SUPPQUAL, RELREC).</span>
+      </div>
+      <div class="rama" style="--g:var(--ink)">
+        <h3>Clases generales</h3>
+        <span class="nota">Comparten identificadores y variables de tiempo; cada clase tiene su tema y sus calificadores.</span>
+        <div class="clases3">
+          <div class="cl c-int"><h4>Intervenciones</h4><span class="preg">¿Qué se le administró al sujeto?</span><span class="meta2">Tema: <code>--TRT</code><br>Una fila por tratamiento</span><div class="chips"><span>CM</span><span>EX</span><span>SU</span></div></div>
+          <div class="cl c-eve"><h4>Eventos</h4><span class="preg">¿Qué le ocurrió al sujeto?</span><span class="meta2">Tema: <code>--TERM</code><br>Una fila por evento</span><div class="chips"><span>AE</span><span>DS</span><span>MH</span><span>DV*</span></div></div>
+          <div class="cl c-hal"><h4>Hallazgos</h4><span class="preg">¿Qué se midió o evaluó?</span><span class="meta2">Tema: <code>--TESTCD</code><br>Una fila por prueba y momento</span><div class="chips"><span>EG</span><span>IE</span><span>LB</span><span>PE</span><span>QS</span><span>SC</span><span>VS</span></div></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <p>En la mayoría de los casos la clase se deduce fácilmente del tema. A menudo <b>Hallazgos</b> es la mejor opción para mediciones o respuestas a preguntas. Si no está claro, se decide según la intención científica del protocolo, el plan de análisis o la estructura de los datos (apéndice 10.6).</p>
-  <h3>Tres reglas comunes</h3>
-  <ul class="rules">
-    <li><span class="ok">Identificadores</span><span>El mismo conjunto de variables identificadoras se aplica a todos los dominios de las clases generales.</span></li>
-    <li><span class="ok">Tiempo</span><span>Cualquier variable de tiempo válida puede usarse en cualquier dataset, pero de forma consistente en todos los dominios.</span></li>
-    <li><span class="ok">Calificadores</span><span>Se puede añadir cualquier calificador de la misma clase general al modelo de dominio.</span></li>
-  </ul>
+
+  <h3>¿A qué clase pertenece?</h3>
+  <p>Todos estos datos son del mismo sujeto. Clasifica cada uno:</p>
+  <div class="sorter" id="sorter"></div>
+  <p class="hint">Casi siempre la clase se deduce del tema. Para mediciones o respuestas a preguntas, Hallazgos suele ser la mejor opción. Si no está claro, se decide según la intención del protocolo, el plan de análisis o la estructura de los datos (apéndice 10.6).</p>
+
+  <h3>Las tres reglas comunes, con ejemplos</h3>
+  <p>Estas reglas dicen qué variables puede llevar cualquier dominio de las clases generales.</p>
+  <div class="reglas">
+    <div class="regla">
+      <h4><span class="n">1</span>Los identificadores son los mismos en todos los dominios</h4>
+      <span class="enuncia">«El mismo conjunto de variables identificadoras se aplica a todos los dominios de las clases generales.»</span>
+      <div class="ejemplo"><b>Ejemplo</b>
+        <span>El sujeto 101 tiene datos en tres dominios de clases distintas. Las columnas identificadoras (en morado) son las mismas en los tres; solo cambia el prefijo de --SEQ. Gracias a ellas se pueden unir todos los datos de un sujeto.</span>
+        <div class="scroll"><table>
+          <tr><th class="hl">STUDYID</th><th class="hl">DOMAIN</th><th class="hl">USUBJID</th><th class="hl">--SEQ</th><th>Variable de tema</th></tr>
+          <tr><td class="hl">ABC</td><td class="hl">AE</td><td class="hl">101</td><td class="hl">AESEQ = 1</td><td>AETERM = NAUSEA</td></tr>
+          <tr><td class="hl">ABC</td><td class="hl">CM</td><td class="hl">101</td><td class="hl">CMSEQ = 1</td><td>CMTRT = IBUPROFEN</td></tr>
+          <tr><td class="hl">ABC</td><td class="hl">LB</td><td class="hl">101</td><td class="hl">LBSEQ = 1</td><td>LBTESTCD = HGB</td></tr>
+        </table></div>
+        <span class="hint">También se puede usar un identificador opcional cuando convenga, por ejemplo --GRPID para agrupar registros relacionados.</span>
+      </div>
+    </div>
+
+    <div class="regla">
+      <h4><span class="n">2</span>Cualquier variable de tiempo, pero de forma consistente</h4>
+      <span class="enuncia">«Cualquier variable de tiempo válida puede usarse en cualquier dataset, pero de forma consistente en todos los dominios.»</span>
+      <div class="ejemplo"><b>Ejemplo</b>
+        <span>En un estudio de farmacocinética las muestras se toman en momentos precisos respecto a la dosis. El patrocinador puede usar en LB las variables de tiempo --TPTNUM y --TPT (momento planificado):</span>
+        <div class="scroll"><table>
+          <tr><th>USUBJID</th><th>LBTESTCD</th><th class="hl">VISITNUM</th><th class="hl">VISIT</th><th class="hl2">LBTPTNUM</th><th class="hl2">LBTPT</th></tr>
+          <tr><td>101</td><td>GLUC</td><td class="hl">2</td><td class="hl">WEEK 1</td><td class="hl2">1</td><td class="hl2">PRE-DOSE</td></tr>
+          <tr><td>101</td><td>GLUC</td><td class="hl">2</td><td class="hl">WEEK 1</td><td class="hl2">2</td><td class="hl2">2 H POST-DOSE</td></tr>
+        </table></div>
+        <ul class="veredicto">
+          <li><span class="s y">✓</span><span>Si en LB la visita 2 es «WEEK 1», en VS, EG y el resto de dominios la visita 2 también es «WEEK 1».</span></li>
+          <li><span class="s y">✓</span><span>Las fechas se escriben igual en todos los dominios (ISO 8601): LBDTC, VSDTC, AESTDTC…</span></li>
+          <li><span class="s n">✗</span><span>Llamar a la visita 2 «WEEK 1» en LB y «VISIT 2» en VS: los datos ya no se pueden comparar.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="regla">
+      <h4><span class="n">3</span>Se pueden añadir calificadores, pero solo de la misma clase</h4>
+      <span class="enuncia">«Se puede añadir a un modelo de dominio cualquier calificador de la misma clase general.»</span>
+      <div class="ejemplo"><b>Ejemplo</b>
+        <span>AE pertenece a la clase Eventos. Si el CRF recoge dónde apareció una reacción en el lugar de inyección, el patrocinador puede añadir AELOC, porque --LOC es un calificador de la clase Eventos.</span>
+        <div class="scroll"><table>
+          <tr><th>USUBJID</th><th>AESEQ</th><th>AETERM</th><th>AESEV</th><th class="hl2">AELOC</th></tr>
+          <tr><td>101</td><td>3</td><td>INJECTION SITE REACTION</td><td>MILD</td><td class="hl2">LEFT ARM</td></tr>
+        </table></div>
+        <ul class="veredicto">
+          <li><span class="s y">✓</span><span><b>AELOC</b>: --LOC es un calificador de Eventos.</span></li>
+          <li><span class="s n">✗</span><span><b>AEORRES</b>: --ORRES es un calificador de Hallazgos, no de Eventos.</span></li>
+          <li><span class="s n">✗</span><span><b>AEFOTO</b>: inventada por el patrocinador, no existe en ninguna clase. Ese dato iría a SUPPQUAL.</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- ============ 2.5 ============ -->
@@ -202,6 +306,20 @@ const T = {
     AESEV:{r:'qual',rol:'Calificador de registro',t:'«Leves» es la severidad. Describe el registro en su conjunto. Se guarda MILD.'},
     AESTDY:{r:'timing',rol:'Tiempo (Timing)',t:'«A partir del Día 6 del estudio» es el día de inicio del evento. Se guarda 6.'}
   },
+  x: [
+    {k:'dom',n:'Dominio',t:'Dominio AE = el dataset ae.xpt',d:'Reúne todas las observaciones de eventos adversos de todos los sujetos: aquí, 4 filas de 3 sujetos. Cada dominio se entrega normalmente como un dataset.'},
+    {k:'obs',n:'Observación',t:'Observación = una fila',d:'«El sujeto 101 tuvo náuseas leves a partir del día 6.» La fila reúne todo lo que se sabe de ese hecho concreto. El sujeto 101 tiene dos observaciones en AE (AESEQ 1 y 2).'},
+    {k:'var',n:'Variable',t:'Variable = una columna (AESEV)',d:'AESEV guarda la severidad en todas las filas del dominio. Tiene nombre, etiqueta, tipo y rol: aquí, calificador de registro.'},
+    {k:'val',n:'Valor',t:'Valor = una celda',d:'Es el cruce de una observación y una variable: la severidad del evento 1 del sujeto 101 es MILD.'}
+  ],
+  clasifica: [
+    ['Toma ibuprofeno 400 mg para el dolor de cabeza.',0,'Es un tratamiento que recibe: Intervenciones (CM, medicación concomitante).'],
+    ['Tiene dolor de cabeza moderado desde el día 3.',1,'Es algo que le ocurre: Eventos (AE).'],
+    ['Presión arterial sistólica: 128 mmHg en la visita 2.',2,'Es una medición planificada: Hallazgos (VS).'],
+    ['Fuma 10 cigarrillos al día.',0,'Es una sustancia que se autoadministra: Intervenciones (SU).'],
+    ['Abandona el estudio por un evento adverso.',1,'Es la disposición del sujeto: Eventos (DS).'],
+    ['Hemoglobina: 13,2 g/dL.',2,'Es un resultado de laboratorio: Hallazgos (LB).']
+  ],
   qPrefix: "Calificador ",
   q: [
     {n:'De agrupación',d:'Agrupan un conjunto de observaciones dentro del mismo dominio.',ex:'Ejemplos: --CAT y --SCAT.',on:['LBCAT'],ref:[]},
@@ -267,6 +385,6 @@ const T = {
   aciertos: (g,d,n) => 'Aciertos: '+g+' de '+d+(d===n?' · Cuestionario completado':'')
 };
 </script>
-<script src="../recursos/leccion-sdtmig.js?v=3"></script>
+<script src="../recursos/leccion-sdtmig.js?v=4"></script>
 </body>
 </html>

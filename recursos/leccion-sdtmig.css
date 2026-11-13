@@ -114,3 +114,72 @@ td.q-ref,th.q-ref{box-shadow:inset 0 0 0 2px var(--muted)}
 footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);padding-top:16px}
 @media (max-width:560px){.rules li{grid-template-columns:1fr}.ok,.no{justify-self:start}}
 .doms button[hidden]{display:none}
+
+/* ---------- 2.1 Niveles anidados: envío > dominio > observación > variable ---------- */
+.lv-dom{--n:var(--primary)}.lv-obs{--n:var(--accent)}.lv-var{--n:var(--sun)}
+.niveles{display:flex;flex-direction:column;gap:10px}
+.nv{border:2px solid var(--n,var(--line));border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:10px;
+  background:color-mix(in srgb,var(--n,var(--line)) 7%,var(--surface))}
+.nv-envio{--n:var(--muted);border-style:dashed}
+.nv-cab{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.nv-tit{font:700 15px var(--display);color:color-mix(in srgb,var(--n) 75%,var(--ink))}
+.nv-eq{font:600 12px var(--mono);color:var(--surface);background:var(--n);border-radius:999px;padding:2px 10px}
+.lv-var .nv-eq,.nv-envio .nv-eq{color:var(--ink)}
+.nv-desc{font-size:14px;color:var(--muted)}
+.archivos{display:flex;flex-wrap:wrap;gap:6px}
+.archivos span{font:600 13px var(--mono);border:1px solid var(--line);border-radius:8px;padding:4px 10px;background:var(--surface);color:var(--muted)}
+.archivos span.on{border-color:var(--primary);color:var(--primary);box-shadow:inset 0 0 0 1px var(--primary)}
+.nv-frase{font:500 15px var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:8px 10px;overflow-wrap:anywhere}
+.nv-frase b{color:color-mix(in srgb,var(--sun) 70%,var(--ink));background:color-mix(in srgb,var(--sun) 22%,transparent);border-radius:4px;padding:0 4px}
+
+/* ---------- 2.1 Explorador de dataset ---------- */
+.xwrap{display:flex;flex-direction:column;gap:8px;border-radius:12px;padding:10px;border:2px solid transparent;transition:border-color .2s}
+.xnombre{align-self:flex-start;font:600 14px var(--mono);border:1px solid var(--line);border-radius:8px;padding:3px 10px;background:var(--bg)}
+.xwrap[data-modo="dom"]{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 6%,transparent)}
+.xwrap[data-modo="dom"] .xnombre{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+.xwrap[data-modo="obs"] tr.fila-sel td{background:color-mix(in srgb,var(--accent) 16%,var(--surface));box-shadow:inset 0 2px 0 var(--accent),inset 0 -2px 0 var(--accent)}
+.xwrap[data-modo="var"] .col-sel{background:color-mix(in srgb,var(--sun) 24%,var(--surface));box-shadow:inset 2px 0 0 var(--sun),inset -2px 0 0 var(--sun)}
+.xwrap[data-modo="val"] .celda-sel{background:color-mix(in srgb,var(--sun) 30%,var(--surface));box-shadow:inset 0 0 0 3px var(--sun)}
+.explain.x-dom{--c:var(--primary);--cb:color-mix(in srgb,var(--primary) 10%,var(--surface))}
+.explain.x-obs{--c:var(--accent);--cb:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.explain.x-var,.explain.x-val{--c:color-mix(in srgb,var(--sun) 70%,var(--ink));--cb:color-mix(in srgb,var(--sun) 14%,var(--surface))}
+
+/* ---------- 2.4 Mapa de clases ---------- */
+.mapa{display:flex;flex-direction:column;align-items:stretch;gap:0}
+.mapa .raiz{align-self:center;font:700 16px var(--display);background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 20px;text-align:center}
+.mapa .linea{align-self:center;width:2px;height:18px;background:var(--line)}
+.mapa .ramas{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:12px;border-top:2px solid var(--line);padding-top:14px}
+.rama{border-radius:var(--radius);padding:14px;display:flex;flex-direction:column;gap:10px;border:2px solid var(--g);background:color-mix(in srgb,var(--g) 6%,var(--surface))}
+.rama>h3{margin:0;font-size:16px;color:color-mix(in srgb,var(--g) 80%,var(--ink))}
+.rama .nota{font-size:13px;color:var(--muted)}
+.clases3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cl{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--g);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:8px;font-size:14px}
+.cl h4{margin:0;font:700 16px var(--display);color:var(--g)}
+.cl .preg{font-weight:600}
+.cl .meta2{font-size:13px;color:var(--muted)}
+.cl .meta2 code{color:var(--ink)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chips span{font:600 12px var(--mono);border-radius:6px;padding:2px 7px;background:color-mix(in srgb,var(--g) 14%,var(--surface));color:color-mix(in srgb,var(--g) 80%,var(--ink))}
+@media (max-width:700px){.mapa .ramas{grid-template-columns:1fr}.clases3{grid-template-columns:1fr}}
+
+/* ---------- 2.4 Clasificador ---------- */
+.sorter{display:flex;flex-direction:column;gap:10px}
+.srt{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.srt p{font-weight:600}
+.srt .opts button.c-int,.srt .opts button.c-eve,.srt .opts button.c-hal{border-left:4px solid var(--g)}
+
+/* ---------- 2.4 Reglas con ejemplo ---------- */
+.reglas{display:flex;flex-direction:column;gap:14px}
+.regla{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.regla h4{margin:0;font:700 17px var(--display);display:flex;align-items:center;gap:10px}
+.regla h4 .n{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--primary);color:var(--on-primary);font:700 14px var(--mono)}
+.regla .enuncia{font-style:italic;color:var(--muted)}
+.regla .ejemplo{border-left:4px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--bg));border-radius:0 10px 10px 0;padding:10px 14px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.regla .ejemplo>b{color:var(--accent);font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.08em}
+.regla table{font-size:13px}
+.regla td.hl,.regla th.hl{background:color-mix(in srgb,var(--primary) 12%,var(--surface));color:var(--primary)}
+.regla td.hl2,.regla th.hl2{background:color-mix(in srgb,var(--accent) 12%,var(--surface));color:var(--accent)}
+.veredicto{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.veredicto li{display:flex;gap:10px;align-items:baseline;font-size:15px}
+.veredicto .s{font:700 13px var(--mono);flex:none}
+.veredicto .s.y{color:var(--ok)}.veredicto .s.n{color:var(--no)}
