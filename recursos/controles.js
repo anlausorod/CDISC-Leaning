@@ -40,8 +40,8 @@
   }
 
   var TXT = {
-    es: { indice: "← Índice", tema: "Cambiar tema", claro: "Tema claro", oscuro: "Tema oscuro", idioma: "Idioma", noDisp: "Esta lección aún no está disponible en inglés" },
-    en: { indice: "← Index", tema: "Toggle theme", claro: "Light theme", oscuro: "Dark theme", idioma: "Language", noDisp: "This lesson is not available in Spanish yet" }
+    es: { indice: "← Índice", tema: "Cambiar tema", claro: "Tema claro", oscuro: "Tema oscuro", idioma: "Idioma", noDisp: "Esta lección aún no está disponible en inglés", anterior: "← Anterior", siguiente: "Siguiente →" },
+    en: { indice: "← Index", tema: "Toggle theme", claro: "Light theme", oscuro: "Dark theme", idioma: "Language", noDisp: "This lesson is not available in Spanish yet", anterior: "← Previous", siguiente: "Next →" }
   };
 
   var CSS =
@@ -56,7 +56,16 @@
     ".cdisc-indice{margin-right:auto;display:inline-flex;align-items:center;font:600 14px/1 var(--body,system-ui,sans-serif);" +
     "color:var(--on-primary,#fff);background:var(--primary,#6D28D9);text-decoration:none;border-radius:999px;padding:8px 16px}" +
     ".cdisc-indice:hover{filter:brightness(1.1)}" +
-    ".cdisc-indice:focus-visible{outline:3px solid var(--accent,currentColor);outline-offset:2px}";
+    ".cdisc-indice:focus-visible{outline:3px solid var(--accent,currentColor);outline-offset:2px}" +
+    /* modo una sección a la vez */
+    "section[hidden]{display:none!important}" +
+    "nav a.cdisc-activa{background:var(--primary,#6D28D9)!important;border-color:var(--primary,#6D28D9)!important;color:var(--on-primary,#fff)!important;font-weight:600}" +
+    ".cdisc-pasos{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:8px;padding-top:20px;border-top:1px solid var(--line,#ddd)}" +
+    ".cdisc-pasos button{font:600 15px var(--body,system-ui,sans-serif);border-radius:999px;padding:10px 18px;cursor:pointer;" +
+    "background:transparent;color:var(--ink,inherit);border:2px solid var(--line,#ccc)}" +
+    ".cdisc-pasos button.sig{margin-left:auto;background:var(--primary,#6D28D9);border-color:var(--primary,#6D28D9);color:var(--on-primary,#fff)}" +
+    ".cdisc-pasos button:hover{filter:brightness(1.08)}" +
+    ".cdisc-pasos button:focus-visible{outline:3px solid var(--accent,currentColor);outline-offset:2px}";
 
   function boton(texto, alPulsar) {
     var b = document.createElement("button");
@@ -161,6 +170,70 @@
 
     matchMedia("(prefers-color-scheme: dark)").addEventListener("change", pintar);
     pintar();
+    if (!esIndice()) unaSeccionALaVez();
+  }
+
+  /*
+   * Modo "una sección a la vez": si la página tiene un <nav> con enlaces a secciones
+   * (<a href="#id"> → <section id="id">), solo se muestra la sección elegida.
+   * Para desactivarlo en una lección: <body data-secciones="todas">.
+   */
+  function unaSeccionALaVez() {
+    if (document.body.dataset.secciones === "todas") return;
+    var nav = document.querySelector("main nav") || document.querySelector("nav");
+    if (!nav) return;
+    var enlaces = [], secciones = [];
+    nav.querySelectorAll('a[href^="#"]').forEach(function (a) {
+      var s = document.getElementById(decodeURIComponent(a.getAttribute("href").slice(1)));
+      if (s && s.tagName === "SECTION") { enlaces.push(a); secciones.push(s); }
+    });
+    if (secciones.length < 2) return;
+    var t = TXT[idioma];
+
+    // Botones Anterior / Siguiente al final de cada sección
+    secciones.forEach(function (s, i) {
+      var pasos = document.createElement("div");
+      pasos.className = "cdisc-pasos";
+      if (i > 0) {
+        var a = boton(t.anterior, function () { mostrar(i - 1, true); });
+        a.title = enlaces[i - 1].textContent;
+        pasos.append(a);
+      }
+      if (i < secciones.length - 1) {
+        var b = boton(t.siguiente, function () { mostrar(i + 1, true); });
+        b.className = "sig";
+        b.title = enlaces[i + 1].textContent;
+        pasos.append(b);
+      }
+      s.append(pasos);
+    });
+
+    function mostrar(i, desplazar) {
+      secciones.forEach(function (s, j) { s.hidden = j !== i; });
+      enlaces.forEach(function (a, j) {
+        a.classList.toggle("cdisc-activa", j === i);
+        if (j === i) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+      });
+      if (desplazar !== null) history.replaceState(null, "", "#" + secciones[i].id);
+      // Si el menú quedó fuera de la vista, sube hasta él
+      if (desplazar && nav.getBoundingClientRect().top < 0) nav.scrollIntoView({ block: "start" });
+    }
+    function indicePorHash() {
+      var id = decodeURIComponent(location.hash.slice(1));
+      for (var i = 0; i < secciones.length; i++) if (secciones[i].id === id) return i;
+      return -1;
+    }
+
+    enlaces.forEach(function (a, i) {
+      a.addEventListener("click", function (e) { e.preventDefault(); mostrar(i, false); });
+    });
+    window.addEventListener("hashchange", function () {
+      var i = indicePorHash();
+      if (i >= 0) mostrar(i, true);
+    });
+    // Al cargar sin #sección no se toca la dirección (si no, el navegador saltaría a ella)
+    var inicial = indicePorHash();
+    mostrar(Math.max(0, inicial), inicial >= 0 ? false : null);
   }
 
   window.CDISC = { idioma: function () { return idioma; } };

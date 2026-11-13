@@ -29,15 +29,18 @@ Añade estas dos líneas dentro del `<head>` de cada lección:
 
 ```html
 <!-- en lecciones/ -->
-<link rel="stylesheet" href="../recursos/estilo.css?v=2">
-<script src="../recursos/controles.js?v=2"></script>
+<link rel="stylesheet" href="../recursos/estilo.css?v=3">
+<script src="../recursos/controles.js?v=3"></script>
 <!-- en lecciones/en/ -->
-<link rel="stylesheet" href="../../recursos/estilo.css?v=2">
-<script src="../../recursos/controles.js?v=2"></script>
+<link rel="stylesheet" href="../../recursos/estilo.css?v=3">
+<script src="../../recursos/controles.js?v=3"></script>
 ```
 
-- **Versión (`?v=2`):** cuando se modifique `estilo.css` o `controles.js`, sube ese número en todas
+- **Versión (`?v=3`):** cuando se modifique `estilo.css` o `controles.js`, sube ese número en todas
   las páginas para que los navegadores no usen la copia antigua guardada en caché.
+- **Una sección a la vez:** si la lección tiene un `<nav>` con enlaces a sus secciones
+  (`<a href="#roles">` → `<section id="roles">`), solo se ve la sección elegida, con botones
+  Anterior/Siguiente. Para ver la lección entera de una vez: `<body data-secciones="todas">`.
 - **Estilo:** `estilo.css` aplica los colores y la tipografía "Mosaico" y define variables
   (`--primary`, `--accent`, `--topic`…) que cambian solas entre claro y oscuro. Para una lección
   sencilla basta con envolver el contenido en `<main class="cdisc-prosa">`. Ver `guia-de-estilo.html`.
