@@ -40,19 +40,23 @@
   }
 
   var TXT = {
-    es: { tema: "Cambiar tema", claro: "Tema claro", oscuro: "Tema oscuro", idioma: "Idioma", noDisp: "Esta lección aún no está disponible en inglés" },
-    en: { tema: "Toggle theme", claro: "Light theme", oscuro: "Dark theme", idioma: "Language", noDisp: "This lesson is not available in Spanish yet" }
+    es: { indice: "← Índice", tema: "Cambiar tema", claro: "Tema claro", oscuro: "Tema oscuro", idioma: "Idioma", noDisp: "Esta lección aún no está disponible en inglés" },
+    en: { indice: "← Index", tema: "Toggle theme", claro: "Light theme", oscuro: "Dark theme", idioma: "Language", noDisp: "This lesson is not available in Spanish yet" }
   };
 
   var CSS =
-    ".cdisc-barra{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;max-width:860px;margin:0 auto;" +
+    ".cdisc-barra{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;max-width:860px;margin:0 auto;" +
     "padding:12px max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px));font:500 14px system-ui,-apple-system,'Segoe UI',sans-serif}" +
     ".cdisc-grupo{display:inline-flex;border:1px solid color-mix(in srgb,currentColor 30%,transparent);border-radius:999px;overflow:hidden}" +
     ".cdisc-grupo button{font:inherit;color:inherit;background:transparent;border:0;padding:5px 12px;cursor:pointer;min-width:40px}" +
     ".cdisc-grupo button+button{border-left:1px solid color-mix(in srgb,currentColor 30%,transparent)}" +
     ".cdisc-grupo button[aria-pressed='true']{background:color-mix(in srgb,currentColor 16%,transparent);font-weight:700}" +
     ".cdisc-grupo button:disabled{opacity:.4;cursor:not-allowed}" +
-    ".cdisc-grupo button:focus-visible{outline:2px solid currentColor;outline-offset:-3px}";
+    ".cdisc-grupo button:focus-visible{outline:2px solid currentColor;outline-offset:-3px}" +
+    ".cdisc-indice{margin-right:auto;display:inline-flex;align-items:center;font:600 14px/1 var(--body,system-ui,sans-serif);" +
+    "color:var(--on-primary,#fff);background:var(--primary,#6D28D9);text-decoration:none;border-radius:999px;padding:8px 16px}" +
+    ".cdisc-indice:hover{filter:brightness(1.1)}" +
+    ".cdisc-indice:focus-visible{outline:3px solid var(--accent,currentColor);outline-offset:2px}";
 
   function boton(texto, alPulsar) {
     var b = document.createElement("button");
@@ -87,6 +91,14 @@
     var bOscuro = boton("☾", function () { cambiarTema("dark"); });
     gTema.append(bClaro, bOscuro);
 
+    // Botón de vuelta al índice (en todas las páginas menos el propio índice)
+    if (!esIndice()) {
+      var bIndice = document.createElement("a");
+      bIndice.className = "cdisc-indice";
+      bIndice.href = raiz;
+      bIndice.textContent = TXT[idioma].indice;
+      barra.append(bIndice);
+    }
     barra.append(gIdioma, gTema);
     document.body.prepend(barra);
 
