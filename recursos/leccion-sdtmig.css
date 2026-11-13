@@ -183,3 +183,34 @@ footer{font-size:13px;color:var(--muted);border-top:1px solid var(--line);paddin
 .veredicto li{display:flex;gap:10px;align-items:baseline;font-size:15px}
 .veredicto .s{font:700 13px var(--mono);flex:none}
 .veredicto .s.y{color:var(--ok)}.veredicto .s.n{color:var(--no)}
+
+/* ---------- 2.1 Regla de los dos guiones ---------- */
+.guiones{border:2px dashed var(--accent);border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:color-mix(in srgb,var(--accent) 5%,var(--surface))}
+.guiones h4{margin:0;font:700 16px var(--display);color:var(--accent)}
+.conv{display:flex;flex-wrap:wrap;gap:6px}
+.conv span{font:600 13px var(--mono);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:4px 8px}
+.conv span i{font-style:normal;color:var(--accent)}
+.conv span s{color:var(--muted);text-decoration:none}
+tr.modelo th{background:var(--bg);color:var(--accent);font-weight:600;font-size:13px;border-bottom:2px dashed var(--accent)}
+tr.modelo th.q-on{color:var(--qual)}
+
+/* ---------- 2.6.1 Por qué / variables por clase ---------- */
+.porque{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:12px}
+.porque>div{border-radius:var(--radius);padding:14px 16px;display:flex;flex-direction:column;gap:6px;font-size:15px;background:var(--surface);border:1px solid var(--line)}
+.porque h4{margin:0;font:700 16px var(--display)}
+.porque .comun{border-top:5px solid var(--ok)}
+.porque .propio{border-top:5px solid var(--accent)}
+.flujo2{display:flex;flex-direction:column;gap:8px}
+.fila2{border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--bg);display:flex;flex-direction:column;gap:6px}
+.fila2 .cab2{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+.fila2 .cab2 b{font:600 15px var(--display)}
+.fila2 .est{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.fila2 .motivo{font-size:14px;color:var(--muted)}
+.fila2.incl{border-color:var(--ok);background:var(--ok-bg)}
+.fila2.incl .est{color:var(--ok)}
+.fila2.excl .est{color:var(--no)}
+.fila2.excl .chips span{text-decoration:line-through;opacity:.7}
+.fila2 .chips span{background:color-mix(in srgb,var(--g,var(--ok)) 14%,var(--surface));color:color-mix(in srgb,var(--g,var(--ok)) 80%,var(--ink))}
+.ejnuevo{border-left:4px solid var(--primary);background:color-mix(in srgb,var(--primary) 6%,var(--bg));border-radius:0 10px 10px 0;padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:15px}
+.ejnuevo>b{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--primary)}
+.flujo2 .destino{text-align:center;font:700 17px var(--display);background:var(--primary);color:var(--on-primary);border-radius:10px;padding:10px 14px}

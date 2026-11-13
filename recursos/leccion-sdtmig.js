@@ -112,15 +112,30 @@
   });
 
   /* 2.6.1 Variables de un dominio nuevo */
+  const N = T.nuevo;
+  function chips(vars) { const c = el("div", "chips"); vars.forEach(v => c.append(el("span", null, v))); return c; }
+  function fila(cls, titulo, vars, incluida, motivo) {
+    const d = el("div", "fila2 " + (incluida ? "incl " : "excl ") + cls), cab = el("div", "cab2");
+    cab.append(el("b", null, titulo), el("span", "est", incluida ? "✓ " + N.si : "✗ " + N.no));
+    d.append(cab, chips(vars));
+    if (motivo) d.append(el("span", "motivo", motivo));
+    return d;
+  }
   grupoBotones($("#ntabs"), T.clases.map(c => c.n), i => {
-    const k = T.clases[i].k, f = $("#flujo"); f.innerHTML = "";
-    T.nuevo.filas.forEach(([txt, cuando, cls]) => {
-      const si = cuando === "siempre" || cuando === k;
-      const d = el("div", (si ? "incl " : "excl ") + (cls.length === 3 ? "c-" + cls : "r-" + cls));
-      d.append(el("span", null, txt), el("span", "est", si ? "✓ " + T.nuevo.si : "✗ " + T.nuevo.no));
-      f.append(d);
+    const elegida = T.clases[i], f = $("#flujo"); f.innerHTML = "";
+    N.siempre.forEach(([tit, preg, vars]) => f.append(fila("", tit + " · " + preg, vars, true, null)));
+    N.porClase.forEach((pc, j) => {
+      const cl = T.clases[j], suya = j === i;
+      f.append(fila("c-" + cl.k, N.temaYcal + " " + cl.n, [pc.tema].concat(pc.quals), suya,
+        suya ? N.motivoSi(pc) : N.motivoNo(pc, elegida.n)));
     });
-    f.append(el("div", "destino", "↓ " + T.nuevo.titulo + " (" + T.clases[i].n + ")"));
+    const ej = N.ejemplos[i], box = el("div", "ejnuevo");
+    box.append(el("b", null, N.ejemploTit), el("span", null, ej.idea));
+    const ul = el("ul", "veredicto");
+    ej.si.forEach(([v, t]) => { const li = el("li"); li.append(el("span", "s y", "✓"), el("span", null, v + ": " + t)); ul.append(li); });
+    ej.no.forEach(([v, t]) => { const li = el("li"); li.append(el("span", "s n", "✗"), el("span", null, v + ": " + t)); ul.append(li); });
+    box.append(ul);
+    f.append(el("div", "destino", "↓ " + N.titulo + " (" + elegida.n + ")"), box);
   })(2);
 
   /* Cuestionario */

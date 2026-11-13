@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDTMIG 3.1.1 · Ch. 2 Fundamentals of the SDTM</title>
-<link rel="stylesheet" href="../../recursos/estilo.css?v=4">
-<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=4">
-<script src="../../recursos/controles.js?v=4"></script>
+<link rel="stylesheet" href="../../recursos/estilo.css?v=5">
+<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=5">
+<script src="../../recursos/controles.js?v=5"></script>
 </head>
 <body>
 <main>
@@ -94,13 +94,20 @@
   </div>
 
   <h3>The five qualifier subclasses</h3>
-  <p>Pick a subclass to see its definition and which columns of this lab record belong to it. The two hyphens in <code>--ORRES</code> are replaced with the domain code: in LB it is <code>LBORRES</code>.</p>
+  <div class="guiones">
+    <h4>The two-hyphen “--” rule</h4>
+    <span>In the models, variables are written with two leading hyphens: <code>--TESTCD</code>, <code>--ORRES</code>, <code>--SEQ</code>… The hyphens are a placeholder filled with the <b>domain code</b> (step 9 in section 2.6). The rule applies to <b>every</b> variable written this way, whether topic, qualifier, timing or an identifier such as --SEQ:</span>
+    <div class="conv"><span><s>--</s>TESTCD → <i>LB</i>TESTCD</span><span><s>--</s>ORRESU → <i>LB</i>ORRESU</span><span><s>--</s>SEQ → <i>AE</i>SEQ</span><span><s>--</s>TERM → <i>AE</i>TERM</span><span><s>--</s>TRT → <i>CM</i>TRT</span><span><s>--</s>STDTC → <i>CM</i>STDTC</span></div>
+    <span class="hint">Variables whose full name is already given in the model carry no prefix, because they mean the same in every domain: STUDYID, DOMAIN, USUBJID, VISITNUM, VISIT…</span>
+  </div>
+  <p>Pick a subclass to see its definition and which columns of this lab record belong to it. The first row shows each variable as written in the model; the second, how it looks in the LB domain.</p>
   <div class="panel">
     <div class="tabs" id="qtabs" role="group" aria-label="Qualifier subclasses"></div>
     <div><h3 id="qtitle"></h3><p id="qdesc"></p></div>
     <p class="hint" id="qex"></p>
     <div class="scroll">
       <table id="lbTable" aria-label="Example record from the LB domain">
+        <tr class="modelo"><th data-v="LBTESTCD">--TESTCD</th><th data-v="LBTEST">--TEST</th><th data-v="LBCAT">--CAT</th><th data-v="LBORRES">--ORRES</th><th data-v="LBORRESU">--ORRESU</th><th data-v="LBORNRLO">--ORNRLO</th><th data-v="LBORNRHI">--ORNRHI</th><th data-v="LBSPEC">--SPEC</th><th data-v="LBBLFL">--BLFL</th></tr>
         <tr><th data-v="LBTESTCD">LBTESTCD<small>Topic</small></th><th data-v="LBTEST">LBTEST</th><th data-v="LBCAT">LBCAT</th><th data-v="LBORRES">LBORRES</th><th data-v="LBORRESU">LBORRESU</th><th data-v="LBORNRLO">LBORNRLO</th><th data-v="LBORNRHI">LBORNRHI</th><th data-v="LBSPEC">LBSPEC</th><th data-v="LBBLFL">LBBLFL</th></tr>
         <tr><td data-v="LBTESTCD">GLUC</td><td data-v="LBTEST">Glucose</td><td data-v="LBCAT">CHEMISTRY</td><td data-v="LBORRES">98</td><td data-v="LBORRESU">mg/dL</td><td data-v="LBORNRLO">70</td><td data-v="LBORNRHI">99</td><td data-v="LBSPEC">SERUM</td><td data-v="LBBLFL">Y</td></tr>
       </table>
@@ -278,11 +285,17 @@
   <div class="fases" id="fases"></div>
 
   <h3>2.6.1 Which variables it may include (steps 4 to 7)</h3>
-  <p>Every new domain inherits the identifier and timing variables. Topic and qualifier variables may only come from <b>its</b> general class. Pick the class of the new domain:</p>
+  <p>A new domain does not invent variables: it takes them from the set the SDTM already defines. The question is <b>which part</b> of that set it may take them from.</p>
+  <div class="porque">
+    <div class="comun"><h4>Common to every class</h4><span><b>Identifiers</b> (whose record, and which one?) and <b>timing</b> (when?). Every observation has a subject and a moment, whether it is a treatment, an event or a measurement. That is why <b>every</b> new domain inherits them.</span></div>
+    <div class="propio"><h4>Specific to each class</h4><span><b>Topic and qualifiers</b> describe <b>what</b> was observed, and each class describes it differently. A treatment has a dose and a route; an event, a severity and an outcome; a measurement, a result and units. That is why a domain only takes topic and qualifiers from <b>its own</b> class.</span></div>
+  </div>
+  <p>Pick the class of the new domain to see what it may include and why:</p>
   <div class="panel">
     <div class="tabs" id="ntabs" role="group" aria-label="Class of the new domain"></div>
-    <div class="flujo" id="flujo"></div>
+    <div class="flujo2" id="flujo"></div>
   </div>
+  <p class="hint">Some names, such as --CAT or --LOC, exist in more than one class. What matters is that the variable is defined in the domain’s class. The variables shown are a selection; the full list for each class is in the SDTM.</p>
 </section>
 
 <!-- ============ Quiz ============ -->
@@ -367,9 +380,20 @@ const T = {
   ],
   paso: 'Step',
   nuevo: {
-    titulo: 'New domain',
-    filas: [['Identifier variables','siempre','id'],['Timing variables','siempre','timing'],['Interventions topic and qualifiers','int','int'],['Events topic and qualifiers','eve','eve'],['Findings topic and qualifiers','hal','hal']],
-    si: 'Included', no: 'Not allowed'
+    titulo: 'New domain', si: 'Included', no: 'Not allowed', temaYcal: 'Topic and qualifiers:', ejemploTit: 'Example',
+    siempre: [['Identifiers','whose record, and which one?',['STUDYID','DOMAIN','USUBJID','--SEQ']],['Timing','when?',['VISITNUM','--DTC','--STDTC','--STDY']]],
+    porClase: [
+      {tema:'--TRT',quals:['--DOSE','--DOSU','--DOSFRQ','--ROUTE'],describe:'what was given, how much and by which route'},
+      {tema:'--TERM',quals:['--SEV','--SER','--REL','--OUT'],describe:'what happened, how serious it was and how it ended'},
+      {tema:'--TESTCD',quals:['--ORRES','--ORRESU','--ORNRLO','--ORNRHI'],describe:'what was measured and what the result was'}
+    ],
+    motivoSi: pc => 'They describe ' + pc.describe + ': exactly what this domain records.',
+    motivoNo: (pc, clase) => 'They describe ' + pc.describe + '. They make no sense in a ' + clase + ' domain.',
+    ejemplos: [
+      {idea:'New Interventions domain for vaccines received before the study:',si:[['--TRT','vaccine name'],['--DOSE and --ROUTE','dose and route of administration']],no:[['--OUT','the outcome of a vaccine reaction belongs to an event: it goes to AE'],['--ORRES','an antibody titer is a finding: it goes to a Findings domain']]},
+      {idea:'New Events domain for hypoglycemia episodes:',si:[['--TERM','the episode'],['--SEV and --OUT','how serious it was and how it ended']],no:[['--ORRES','the measured glucose is a finding: it goes to LB'],['--DOSE','glucose given to treat it is an intervention: it goes to CM']]},
+      {idea:'New Findings domain for an allergy skin test:',si:[['--TESTCD and --TEST','the test performed'],['--ORRES and --ORRESU','the wheal diameter and its units (mm)']],no:[['--OUT','outcome is an Events qualifier, not a Findings one'],['--DOSE','dose is an Interventions qualifier']]}
+    ]
   },
   quiz: [
     ['In an SDTM dataset, what does an observation correspond to?',['A column','A row','A whole domain'],1,'Observations are rows; variables are columns.'],
@@ -385,6 +409,6 @@ const T = {
   aciertos: (g,d,n) => 'Score: '+g+' of '+d+(d===n?' · Quiz complete':'')
 };
 </script>
-<script src="../../recursos/leccion-sdtmig.js?v=4"></script>
+<script src="../../recursos/leccion-sdtmig.js?v=5"></script>
 </body>
 </html>

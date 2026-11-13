@@ -37,7 +37,7 @@ Añade estas dos líneas dentro del `<head>` de cada lección:
 <script src="../../recursos/controles.js?v=3"></script>
 ```
 
-- **Versión (`?v=4`):** cuando se modifique `estilo.css` o `controles.js`, sube ese número en todas
+- **Versión (`?v=5`):** cuando se modifique `estilo.css` o `controles.js`, sube ese número en todas
   las páginas para que los navegadores no usen la copia antigua guardada en caché.
 - **Una sección a la vez:** si la lección tiene un `<nav>` con enlaces a sus secciones
   (`<a href="#roles">` → `<section id="roles">`), solo se ve la sección elegida, con botones

@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDTMIG 3.1.1 · Cap. 2 Fundamentos del SDTM</title>
-<link rel="stylesheet" href="../recursos/estilo.css?v=4">
-<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=4">
-<script src="../recursos/controles.js?v=4"></script>
+<link rel="stylesheet" href="../recursos/estilo.css?v=5">
+<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=5">
+<script src="../recursos/controles.js?v=5"></script>
 </head>
 <body>
 <main>
@@ -94,13 +94,20 @@
   </div>
 
   <h3>Las cinco subclases de calificadores</h3>
-  <p>Elige una subclase para ver su definición y qué columnas de este registro de laboratorio pertenecen a ella. Los dos guiones de <code>--ORRES</code> se sustituyen por el código del dominio: en LB es <code>LBORRES</code>.</p>
+  <div class="guiones">
+    <h4>La regla de los dos guiones «--»</h4>
+    <span>En los modelos, las variables se escriben con dos guiones delante: <code>--TESTCD</code>, <code>--ORRES</code>, <code>--SEQ</code>… Los guiones son un hueco que se rellena con el <b>código del dominio</b> (paso 9 de la sección 2.6). La regla vale para <b>todas</b> las variables que aparecen así, sean de tema, calificadores, de tiempo o identificadores como --SEQ:</span>
+    <div class="conv"><span><s>--</s>TESTCD → <i>LB</i>TESTCD</span><span><s>--</s>ORRESU → <i>LB</i>ORRESU</span><span><s>--</s>SEQ → <i>AE</i>SEQ</span><span><s>--</s>TERM → <i>AE</i>TERM</span><span><s>--</s>TRT → <i>CM</i>TRT</span><span><s>--</s>STDTC → <i>CM</i>STDTC</span></div>
+    <span class="hint">No llevan prefijo las variables que en el modelo ya tienen su nombre completo, porque significan lo mismo en todos los dominios: STUDYID, DOMAIN, USUBJID, VISITNUM, VISIT…</span>
+  </div>
+  <p>Elige una subclase para ver su definición y qué columnas de este registro de laboratorio pertenecen a ella. La primera fila muestra cada variable tal como aparece en el modelo; la segunda, cómo queda en el dominio LB.</p>
   <div class="panel">
     <div class="tabs" id="qtabs" role="group" aria-label="Subclases de calificador"></div>
     <div><h3 id="qtitle"></h3><p id="qdesc"></p></div>
     <p class="hint" id="qex"></p>
     <div class="scroll">
       <table id="lbTable" aria-label="Registro de ejemplo del dominio LB">
+        <tr class="modelo"><th data-v="LBTESTCD">--TESTCD</th><th data-v="LBTEST">--TEST</th><th data-v="LBCAT">--CAT</th><th data-v="LBORRES">--ORRES</th><th data-v="LBORRESU">--ORRESU</th><th data-v="LBORNRLO">--ORNRLO</th><th data-v="LBORNRHI">--ORNRHI</th><th data-v="LBSPEC">--SPEC</th><th data-v="LBBLFL">--BLFL</th></tr>
         <tr><th data-v="LBTESTCD">LBTESTCD<small>Tema</small></th><th data-v="LBTEST">LBTEST</th><th data-v="LBCAT">LBCAT</th><th data-v="LBORRES">LBORRES</th><th data-v="LBORRESU">LBORRESU</th><th data-v="LBORNRLO">LBORNRLO</th><th data-v="LBORNRHI">LBORNRHI</th><th data-v="LBSPEC">LBSPEC</th><th data-v="LBBLFL">LBBLFL</th></tr>
         <tr><td data-v="LBTESTCD">GLUC</td><td data-v="LBTEST">Glucose</td><td data-v="LBCAT">CHEMISTRY</td><td data-v="LBORRES">98</td><td data-v="LBORRESU">mg/dL</td><td data-v="LBORNRLO">70</td><td data-v="LBORNRHI">99</td><td data-v="LBSPEC">SERUM</td><td data-v="LBBLFL">Y</td></tr>
       </table>
@@ -278,11 +285,17 @@
   <div class="fases" id="fases"></div>
 
   <h3>2.6.1 Qué variables puede incluir (pasos 4 a 7)</h3>
-  <p>Todo dominio nuevo hereda las variables identificadoras y de tiempo. Las de tema y calificadores solo pueden venir de <b>su</b> clase general. Elige la clase del dominio nuevo:</p>
+  <p>Un dominio nuevo no inventa variables: las toma del conjunto de variables que ya define el SDTM. La pregunta es <b>de qué parte</b> de ese conjunto puede tomarlas.</p>
+  <div class="porque">
+    <div class="comun"><h4>Comunes a todas las clases</h4><span><b>Identificadores</b> (¿de quién y qué registro?) y <b>tiempo</b> (¿cuándo?). Cualquier observación tiene un sujeto y un momento, sea un tratamiento, un evento o una medición. Por eso <b>todo</b> dominio nuevo las hereda.</span></div>
+    <div class="propio"><h4>Propias de cada clase</h4><span><b>Tema y calificadores</b> describen <b>qué</b> se observó, y cada clase lo describe de forma distinta. Un tratamiento tiene dosis y vía; un evento, severidad y desenlace; una medición, resultado y unidades. Por eso un dominio solo toma tema y calificadores de <b>su</b> clase.</span></div>
+  </div>
+  <p>Elige la clase del dominio nuevo para ver qué puede incluir y por qué:</p>
   <div class="panel">
     <div class="tabs" id="ntabs" role="group" aria-label="Clase del dominio nuevo"></div>
-    <div class="flujo" id="flujo"></div>
+    <div class="flujo2" id="flujo"></div>
   </div>
+  <p class="hint">Algunos nombres, como --CAT o --LOC, existen en más de una clase. Lo que importa es que la variable esté definida en la clase del dominio. Las variables de ejemplo son una selección; la lista completa de cada clase está en el SDTM.</p>
 </section>
 
 <!-- ============ Cuestionario ============ -->
@@ -367,9 +380,20 @@ const T = {
   ],
   paso: 'Paso',
   nuevo: {
-    titulo: 'Dominio nuevo',
-    filas: [['Identificadoras','siempre','id'],['De tiempo','siempre','timing'],['Tema y calificadores de Intervenciones','int','int'],['Tema y calificadores de Eventos','eve','eve'],['Tema y calificadores de Hallazgos','hal','hal']],
-    si: 'Se incluyen', no: 'No permitido'
+    titulo: 'Dominio nuevo', si: 'Se incluyen', no: 'No permitido', temaYcal: 'Tema y calificadores de', ejemploTit: 'Ejemplo',
+    siempre: [['Identificadoras','¿de quién y qué registro?',['STUDYID','DOMAIN','USUBJID','--SEQ']],['De tiempo','¿cuándo?',['VISITNUM','--DTC','--STDTC','--STDY']]],
+    porClase: [
+      {tema:'--TRT',quals:['--DOSE','--DOSU','--DOSFRQ','--ROUTE'],describe:'qué se administró, cuánto y por qué vía'},
+      {tema:'--TERM',quals:['--SEV','--SER','--REL','--OUT'],describe:'qué ocurrió, su gravedad y cómo terminó'},
+      {tema:'--TESTCD',quals:['--ORRES','--ORRESU','--ORNRLO','--ORNRHI'],describe:'qué se midió y qué resultado dio'}
+    ],
+    motivoSi: pc => 'Describen ' + pc.describe + ': justo lo que recoge este dominio.',
+    motivoNo: (pc, clase) => 'Describen ' + pc.describe + '. En un dominio de ' + clase + ' no tienen sentido.',
+    ejemplos: [
+      {idea:'Dominio nuevo de Intervenciones para vacunas recibidas antes del estudio:',si:[['--TRT','nombre de la vacuna'],['--DOSE y --ROUTE','dosis y vía de administración']],no:[['--OUT','el desenlace de una reacción a la vacuna es de un evento: va a AE'],['--ORRES','un título de anticuerpos es un hallazgo: va a un dominio de Hallazgos']]},
+      {idea:'Dominio nuevo de Eventos para episodios de hipoglucemia:',si:[['--TERM','el episodio'],['--SEV y --OUT','su gravedad y cómo terminó']],no:[['--ORRES','la glucosa medida es un hallazgo: va a LB'],['--DOSE','la glucosa administrada para tratarlo es una intervención: va a CM']]},
+      {idea:'Dominio nuevo de Hallazgos para una prueba cutánea de alergia:',si:[['--TESTCD y --TEST','la prueba realizada'],['--ORRES y --ORRESU','el diámetro de la reacción y sus unidades (mm)']],no:[['--OUT','el desenlace es un calificador de Eventos, no de Hallazgos'],['--DOSE','la dosis es un calificador de Intervenciones']]}
+    ]
   },
   quiz: [
     ['En un dataset SDTM, ¿a qué corresponde una observación?',['A una columna','A una fila','A un dominio completo'],1,'Las observaciones son filas; las variables son columnas.'],
@@ -385,6 +409,6 @@ const T = {
   aciertos: (g,d,n) => 'Aciertos: '+g+' de '+d+(d===n?' · Cuestionario completado':'')
 };
 </script>
-<script src="../recursos/leccion-sdtmig.js?v=4"></script>
+<script src="../recursos/leccion-sdtmig.js?v=5"></script>
 </body>
 </html>
