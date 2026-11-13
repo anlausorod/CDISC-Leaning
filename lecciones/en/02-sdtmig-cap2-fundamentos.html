@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDTMIG 3.1.1 · Ch. 2 Fundamentals of the SDTM</title>
-<link rel="stylesheet" href="../../recursos/estilo.css?v=5">
-<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=5">
-<script src="../../recursos/controles.js?v=5"></script>
+<link rel="stylesheet" href="../../recursos/estilo.css?v=6">
+<link rel="stylesheet" href="../../recursos/leccion-sdtmig.css?v=6">
+<script src="../../recursos/controles.js?v=6"></script>
 </head>
 <body>
 <main>
@@ -73,6 +73,10 @@
     <div class="role r-qual"><h3>Qualifier</h3><span class="q">What else do we know?</span><span>Text or numeric values that describe the results or additional traits, such as units or descriptive adjectives.</span><span><span class="tag">--ORRES</span> <span class="tag">--SEV</span> <span class="tag">--ORRESU</span></span></div>
     <div class="role r-rule"><h3>Rule</h3><span class="q">When does it start, end or repeat?</span><span>Expresses an algorithm or executable method to define start, end or looping conditions in the Trial Design model.</span></div>
   </div>
+
+  <h3>Game: which role is it?</h3>
+  <p>You get a real variable with its domain and label. Pick its role. Try to build a streak!</p>
+  <div class="panel juego" id="juego" aria-live="polite"></div>
 
   <h3>Anatomy of an observation</h3>
   <p>The guide uses this Adverse Events example. Click each part of the sentence, or each column, to see which variable stores it and which role it plays.</p>
@@ -302,7 +306,7 @@
 <section id="quiz">
   <h2>Check your knowledge</h2>
   <div class="quiz" id="quizBox"></div>
-  <span class="score" id="score" aria-live="polite"></span>
+  <div class="q-acc"><span class="score" id="score" aria-live="polite"></span><button type="button" id="reiniciar">↺ Restart quiz</button></div>
 </section>
 
 <footer>Study material based on chapter 2 “Fundamentals of the SDTM” of the SDTM Implementation Guide v3.1.1 (CDISC, 2005). Example values are illustrative.</footer>
@@ -405,10 +409,45 @@ const T = {
     ['Which variables may the sponsor add to a standard domain?',['Any, if documented in Define','Only timing variables and qualifiers from the same general class','None'],1,'Everything else goes into SUPPQUAL.'],
     ['Can a new Findings domain include Events qualifiers?',['Yes','No'],1,'Topic and qualifiers may only come from its own general class.']
   ],
+  juego: {
+    pregunta: 'Variable', racha: 'Streak', puntos: 'Correct', bien: 'Correct!', mal: 'No. It is', siguiente: 'Next →', verResultado: 'See result →', otraVez: '↺ Play again', mejorRacha: 'Best streak',
+    roles: ['Identifier','Topic','Timing','Qualifier','Rule'],
+    mensaje: (o,n) => o===n ? 'Perfect! You master the roles.' : o>=n*0.75 ? 'Great job! Review the ones you missed.' : 'Review the role cards and try again.',
+    vars: [
+      ['STUDYID','All domains · “Study Identifier”',0,'It identifies the study.'],
+      ['USUBJID','All domains · “Unique Subject Identifier”',0,'It uniquely identifies the subject across the whole submission.'],
+      ['LBSEQ','LB · “Sequence Number”',0,'It is the sequence number: it identifies each of a subject’s records within the domain.'],
+      ['AETERM','AE · “Reported Term for the Adverse Event”',1,'It is the focus of the observation: the adverse event.'],
+      ['CMTRT','CM · “Reported Name of Drug, Med, or Therapy”',1,'It is the focus of the observation: the medication.'],
+      ['VSTESTCD','VS · “Vital Signs Test Short Name”',1,'It is the focus of the observation: which vital sign was measured.'],
+      ['AESTDTC','AE · “Start Date/Time of Adverse Event”',2,'It describes when the event started.'],
+      ['VISITNUM','Several domains · “Visit Number”',2,'It tells at which visit the data were collected.'],
+      ['AESEV','AE · “Severity/Intensity”',3,'Record qualifier: it describes the event as a whole.'],
+      ['LBORRES','LB · “Result or Finding in Original Units”',3,'Result qualifier: it is the answer to the test.'],
+      ['LBORRESU','LB · “Original Units”',3,'Variable qualifier: it only makes sense together with LBORRES.'],
+      ['AEDECOD','AE · “Dictionary-Derived Term”',3,'Synonym qualifier: another, coded name for AETERM.'],
+      ['LBCAT','LB · “Category for Lab Test”',3,'Grouping qualifier: it groups tests, e.g. CHEMISTRY.'],
+      ['TESTRL','TE (trial design) · “Rule for Start of Element”',4,'It expresses the condition under which a trial element starts: a Rule.']
+    ]
+  },
+  nivel1: 'Basic level', badge1: 'Basic', nivel2: 'Advanced level', badge2: 'Hard',
+  intro2: 'Practical cases and details from the guide. Think carefully before answering.',
+  quiz2: [
+    ['LBORNRLO is a variable qualifier. Which variable does it qualify?',['LBTESTCD','LBORRES','LBSPEC'],1,'The lower limit of the normal range only makes sense together with the original result, LBORRES.'],
+    ['Which qualifier subclass is AEDECOD?',['Result','Synonym','Grouping'],1,'It gives an alternative name (the coded dictionary term) for AETERM.'],
+    ['Which of these variables does NOT change its name when going from the model to the LB domain?',['--SEQ','--TESTCD','USUBJID'],2,'USUBJID already has its full name in the model; --SEQ and --TESTCD become LBSEQ and LBTESTCD.'],
+    ['The vital signs CRF records the patient’s position (sitting or standing). If the VS model lacked that variable, what would the sponsor do?',['Create its own variable, VSPOSIT','Add VSPOS, because --POS is a Findings qualifier','Not submit the data'],1,'Any qualifier from the same general class may be added, and --POS is a Findings record qualifier.'],
+    ['A new Findings domain needs to record the dose given before the test. What does 2.6.1 say?',['It may add --DOSE','It cannot take Interventions qualifiers: that data goes to another domain or to SUPPQUAL','It may if it renames it'],1,'Topic and qualifiers may only come from the domain’s own class.'],
+    ['When creating a new domain, when may the sponsor choose its own two-character code?',['Whenever it likes','Only if CDISC has not already assigned one','Never: the agency assigns them'],1,'Step 8: check the CDISC website first; if there is no code, the sponsor picks a unique one and uses it throughout the submission.'],
+    ['In the “Controlled Terms or Format” column, what does a double asterisk (**) mean?',['The variable is required','The list comes from an external published source, such as MedDRA','The list is sponsor-defined'],1,'One asterisk: sponsor-defined list. Two: external published source, such as MedDRA.'],
+    ['Which dataset label follows the step 13 format?',['ae.xpt – adverse events','Adverse Events, Events, CDISC SDTM Version 3.1.1, One record per event','AE dataset v3'],1,'The format is: <domain name>, <class>, CDISC SDTM Version <version>, <structure>.'],
+    ['A collected data item appears in an analysis dataset but in no tabulation dataset. Is that acceptable?',['Yes, if documented in Define','No: any collected data in an analysis dataset must also appear in a tabulation dataset','Yes, if it is in the analysis dataset’s SUPPQUAL'],1,'Section 2.5 explicitly requires it.'],
+    ['Before V3.x, results of several tests often went in a single row, one column per test. How are they represented in V3.x?',['The same: one column per test','As multiple records: one row per test','In SUPPQUAL'],1,'The V3.x paradigm turns what used to be one horizontal record into multiple records.']
+  ],
   correcto: 'Correct. ', incorrecto: 'Not quite. ',
   aciertos: (g,d,n) => 'Score: '+g+' of '+d+(d===n?' · Quiz complete':'')
 };
 </script>
-<script src="../../recursos/leccion-sdtmig.js?v=5"></script>
+<script src="../../recursos/leccion-sdtmig.js?v=6"></script>
 </body>
 </html>

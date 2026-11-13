@@ -23,6 +23,53 @@
   $$("#sentence .seg, #aeTable [data-k]").forEach(x => x.addEventListener("click", () => showAE(x.dataset.k)));
   showAE("AETERM");
 
+  /* 2.1 Juego: ¿qué rol tiene? */
+  const ROLCLS = ["id", "topic", "timing", "qual", "rule"];
+  function juego() {
+    const J = T.juego, cont = $("#juego"); if (!cont) return;
+    const mezcla = J.vars.slice().sort(() => Math.random() - 0.5);
+    let i = 0, ok = 0, racha = 0, mejor = 0;
+    function ronda() {
+      cont.innerHTML = "";
+      const [v, ctx, r, why] = mezcla[i];
+      const barra = el("div", "j-barra"), prog = el("div", "j-prog"), barraIn = el("i");
+      const sRacha = el("span", "racha"), sPuntos = el("span");
+      const marcador = () => { sRacha.textContent = racha > 1 ? "🔥 " + J.racha + " " + racha : ""; sPuntos.textContent = J.puntos + ": " + ok; };
+      marcador();
+      barra.append(el("span", null, J.pregunta + " " + (i + 1) + "/" + mezcla.length), sRacha, sPuntos);
+      barraIn.style.width = (i / mezcla.length * 100) + "%"; prog.append(barraIn);
+      const carta = el("div", "j-carta"); carta.append(el("span", "j-var", v), el("span", "j-ctx", ctx));
+      const opts = el("div", "j-opts"), fb = el("div", "j-fb"), acc = el("div", "j-acc");
+      J.roles.forEach((nombre, j) => {
+        const b = el("button", "r-" + ROLCLS[j], nombre); b.type = "button";
+        b.onclick = () => {
+          [...opts.children].forEach(x => x.disabled = true);
+          const bien = j === r;
+          if (bien) { ok++; racha++; mejor = Math.max(mejor, racha); } else racha = 0;
+          marcador(); barraIn.style.width = ((i + 1) / mezcla.length * 100) + "%";
+          b.classList.add(bien ? "right" : "wrong"); opts.children[r].classList.add("right");
+          fb.innerHTML = ""; fb.append(el("b", bien ? null : "mal", bien ? J.bien : J.mal + " " + J.roles[r] + "."), document.createTextNode(" " + why));
+          const sig = el("button", null, i < mezcla.length - 1 ? J.siguiente : J.verResultado); sig.type = "button";
+          sig.onclick = () => { i++; i < mezcla.length ? ronda() : fin(); };
+          acc.append(sig); sig.focus();
+        };
+        opts.append(b);
+      });
+      cont.append(barra, prog, carta, opts, fb, acc);
+    }
+    function fin() {
+      cont.innerHTML = "";
+      const f = el("div", "j-fin");
+      const otra = el("button", null, J.otraVez); otra.type = "button";
+      otra.onclick = () => { mezcla.sort(() => Math.random() - 0.5); i = ok = racha = mejor = 0; ronda(); };
+      const acc = el("div", "j-acc"); acc.append(otra);
+      f.append(el("span", "grande", ok + "/" + mezcla.length), el("span", null, J.mensaje(ok, mezcla.length)), el("span", "hint", J.mejorRacha + ": " + mejor), acc);
+      cont.append(f);
+    }
+    ronda();
+  }
+  juego();
+
   /* 2.1 Calificadores */
   grupoBotones($("#qtabs"), T.q.map(q => q.n), i => {
     const q = T.q[i];
@@ -138,22 +185,43 @@
     f.append(el("div", "destino", "↓ " + N.titulo + " (" + elegida.n + ")"), box);
   })(2);
 
-  /* Cuestionario */
-  let good = 0, done = 0;
-  T.quiz.forEach(([q, o, a, why], i) => {
-    const box = el("div", "qz"), opts = el("div", "opts"), fb = el("div", "fb");
-    box.append(el("p", null, (i + 1) + ". " + q), opts, fb);
-    o.forEach((txt, j) => {
-      const b = el("button", null, txt); b.type = "button";
-      b.onclick = () => {
-        if (box.dataset.done) return; box.dataset.done = 1; done++;
-        const ok = j === a; if (ok) good++;
-        b.classList.add(ok ? "right" : "wrong"); opts.children[a].classList.add("right");
-        fb.textContent = (ok ? T.correcto : T.incorrecto) + why;
-        $("#score").textContent = T.aciertos(good, done, T.quiz.length);
-      };
-      opts.append(b);
+  /* Cuestionario (por niveles) */
+  function cuestionario() {
+    const box0 = $("#quizBox"); box0.innerHTML = "";
+    const niveles = T.quiz2
+      ? [{ n: T.nivel1, badge: T.badge1, q: T.quiz }, { n: T.nivel2, badge: T.badge2, intro: T.intro2, q: T.quiz2 }]
+      : [{ n: "", q: T.quiz }];
+    const total = niveles.reduce((t, nv) => t + nv.q.length, 0);
+    let good = 0, done = 0;
+    niveles.forEach((nv, k) => {
+      let g = 0, d = 0;
+      const cab = el("div", "nivel"), sc = el("span", "sc", "0/" + nv.q.length);
+      if (nv.n) { cab.append(el("span", "badge" + (k ? " dif" : ""), nv.badge), el("h3", null, nv.n), sc); box0.append(cab); }
+      if (nv.intro) box0.append(el("p", "hint", nv.intro));
+      nv.q.forEach(([q, o0, a0, why], i) => {
+        // Mezcla el orden de las opciones para que la correcta no esté siempre en el mismo sitio
+        const orden = o0.map((_, j) => j).sort(() => Math.random() - 0.5);
+        const o = orden.map(j => o0[j]), a = orden.indexOf(a0);
+        const box = el("div", "qz"), opts = el("div", "opts"), fb = el("div", "fb");
+        box.append(el("p", null, (i + 1) + ". " + q), opts, fb);
+        o.forEach((txt, j) => {
+          const b = el("button", null, txt); b.type = "button";
+          b.onclick = () => {
+            if (box.dataset.done) return; box.dataset.done = 1; done++; d++;
+            const ok = j === a; if (ok) { good++; g++; }
+            b.classList.add(ok ? "right" : "wrong"); opts.children[a].classList.add("right");
+            fb.textContent = (ok ? T.correcto : T.incorrecto) + why;
+            sc.textContent = g + "/" + nv.q.length;
+            $("#score").textContent = T.aciertos(good, done, total);
+          };
+          opts.append(b);
+        });
+        box0.append(box);
+      });
     });
-    $("#quizBox").append(box);
-  });
+    $("#score").textContent = "";
+  }
+  cuestionario();
+  const rein = $("#reiniciar");
+  if (rein) rein.onclick = () => { cuestionario(); $("#quiz").scrollIntoView({ block: "start" }); };
 })();

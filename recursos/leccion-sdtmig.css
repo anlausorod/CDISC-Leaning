@@ -214,3 +214,34 @@ tr.modelo th.q-on{color:var(--qual)}
 .ejnuevo{border-left:4px solid var(--primary);background:color-mix(in srgb,var(--primary) 6%,var(--bg));border-radius:0 10px 10px 0;padding:12px 14px;display:flex;flex-direction:column;gap:8px;font-size:15px}
 .ejnuevo>b{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.08em;color:var(--primary)}
 .flujo2 .destino{text-align:center;font:700 17px var(--display);background:var(--primary);color:var(--on-primary);border-radius:10px;padding:10px 14px}
+
+/* ---------- 2.1 Juego: ¿qué rol tiene? ---------- */
+.juego{gap:14px}
+.j-barra{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;font:600 13px var(--mono);color:var(--muted)}
+.j-barra .racha{color:var(--accent)}
+.j-prog{height:6px;border-radius:999px;background:var(--soft);overflow:hidden}
+.j-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--accent));transition:width .3s}
+.j-carta{text-align:center;display:flex;flex-direction:column;gap:6px;padding:18px 10px;border:2px dashed var(--line);border-radius:var(--radius);background:var(--bg)}
+.j-var{font:700 clamp(28px,7vw,40px) var(--mono);color:var(--ink);letter-spacing:.02em}
+.j-ctx{font-size:15px;color:var(--muted)}
+.j-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,140px),1fr));gap:8px}
+.j-opts button{font:600 15px var(--body);color:var(--c);background:var(--cb);border:2px solid transparent;border-radius:10px;padding:12px 10px;cursor:pointer}
+.j-opts button:hover:not(:disabled){border-color:var(--c)}
+.j-opts button:disabled{cursor:default;opacity:.45}
+.j-opts button.right{opacity:1;border-color:var(--ok);box-shadow:0 0 0 2px var(--ok)}
+.j-opts button.wrong{opacity:1;border-color:var(--no);text-decoration:line-through}
+.j-fb{min-height:1.6em;font-size:15px}
+.j-fb b{color:var(--ok)}.j-fb b.mal{color:var(--no)}
+.j-acc{display:flex;justify-content:flex-end}
+.j-acc button{font:600 15px var(--body);border-radius:999px;padding:10px 18px;cursor:pointer;background:var(--primary);color:var(--on-primary);border:0}
+.j-fin{text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;padding:10px}
+.j-fin .grande{font:700 44px var(--display);background:linear-gradient(90deg,var(--primary),var(--accent));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* ---------- Cuestionario por niveles ---------- */
+.nivel{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}
+.nivel h3{margin:0}
+.nivel .badge{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.06em;border-radius:999px;padding:3px 10px;color:var(--on-primary);background:var(--primary)}
+.nivel .badge.dif{background:var(--accent);color:var(--on-accent)}
+.nivel .sc{margin-left:auto;font:600 14px var(--mono);color:var(--muted)}
+.q-acc{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.q-acc button{font:600 14px var(--body);border-radius:999px;padding:8px 16px;cursor:pointer;background:transparent;color:var(--ink);border:2px solid var(--line)}

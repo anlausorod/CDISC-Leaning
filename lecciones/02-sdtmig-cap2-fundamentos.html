@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SDTMIG 3.1.1 · Cap. 2 Fundamentos del SDTM</title>
-<link rel="stylesheet" href="../recursos/estilo.css?v=5">
-<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=5">
-<script src="../recursos/controles.js?v=5"></script>
+<link rel="stylesheet" href="../recursos/estilo.css?v=6">
+<link rel="stylesheet" href="../recursos/leccion-sdtmig.css?v=6">
+<script src="../recursos/controles.js?v=6"></script>
 </head>
 <body>
 <main>
@@ -73,6 +73,10 @@
     <div class="role r-qual"><h3>Calificador (Qualifier)</h3><span class="q">¿Qué más sabemos?</span><span>Texto o valores numéricos que describen los resultados o rasgos adicionales, como unidades o adjetivos.</span><span><span class="tag">--ORRES</span> <span class="tag">--SEV</span> <span class="tag">--ORRESU</span></span></div>
     <div class="role r-rule"><h3>Regla (Rule)</h3><span class="q">¿Cuándo empieza, termina o se repite?</span><span>Expresa un algoritmo o método ejecutable para definir condiciones de inicio, fin o repetición en el modelo de Diseño del Ensayo.</span></div>
   </div>
+
+  <h3>Juego: ¿qué rol tiene?</h3>
+  <p>Te mostramos una variable real, con su dominio y su etiqueta. Elige su rol. ¡Intenta hacer una racha!</p>
+  <div class="panel juego" id="juego" aria-live="polite"></div>
 
   <h3>Anatomía de una observación</h3>
   <p>La guía usa este ejemplo del dominio de Eventos Adversos. Toca cada parte de la frase, o cada columna, para ver en qué variable se guarda y qué rol cumple.</p>
@@ -302,7 +306,7 @@
 <section id="quiz">
   <h2>Comprueba lo aprendido</h2>
   <div class="quiz" id="quizBox"></div>
-  <span class="score" id="score" aria-live="polite"></span>
+  <div class="q-acc"><span class="score" id="score" aria-live="polite"></span><button type="button" id="reiniciar">↺ Reiniciar cuestionario</button></div>
 </section>
 
 <footer>Material de estudio basado en el capítulo 2 «Fundamentals of the SDTM» de la SDTM Implementation Guide v3.1.1 (CDISC, 2005). Los valores de los ejemplos son ilustrativos.</footer>
@@ -405,10 +409,45 @@ const T = {
     ['¿Qué variables puede añadir el patrocinador a un dominio estándar?',['Cualquiera, si la documenta en Define','Solo variables de tiempo y calificadores de la misma clase general','Ninguna'],1,'El resto de datos va a SUPPQUAL.'],
     ['Un dominio nuevo de Hallazgos, ¿puede llevar calificadores de Eventos?',['Sí','No'],1,'Tema y calificadores solo pueden venir de su propia clase general.']
   ],
+  juego: {
+    pregunta: 'Variable', racha: 'Racha', puntos: 'Aciertos', bien: '¡Correcto!', mal: 'No. Es', siguiente: 'Siguiente →', verResultado: 'Ver resultado →', otraVez: '↺ Jugar otra vez', mejorRacha: 'Mejor racha',
+    roles: ['Identificador','Tema','Tiempo','Calificador','Regla'],
+    mensaje: (o,n) => o===n ? '¡Perfecto! Dominas los roles.' : o>=n*0.75 ? '¡Muy bien! Repasa las que fallaste.' : 'Repasa las tarjetas de roles y vuelve a intentarlo.',
+    vars: [
+      ['STUDYID','Todos los dominios · «Study Identifier»',0,'Identifica el estudio.'],
+      ['USUBJID','Todos los dominios · «Unique Subject Identifier»',0,'Identifica al sujeto de forma única en todo el envío.'],
+      ['LBSEQ','LB · «Sequence Number»',0,'Es el número de secuencia: identifica cada registro de un sujeto dentro del dominio.'],
+      ['AETERM','AE · «Reported Term for the Adverse Event»',1,'Es el foco de la observación: el evento adverso.'],
+      ['CMTRT','CM · «Reported Name of Drug, Med, or Therapy»',1,'Es el foco de la observación: el medicamento.'],
+      ['VSTESTCD','VS · «Vital Signs Test Short Name»',1,'Es el foco de la observación: qué signo vital se midió.'],
+      ['AESTDTC','AE · «Start Date/Time of Adverse Event»',2,'Describe cuándo empezó el evento.'],
+      ['VISITNUM','Varios dominios · «Visit Number»',2,'Indica en qué visita se recogió el dato.'],
+      ['AESEV','AE · «Severity/Intensity»',3,'Calificador de registro: describe el evento en su conjunto.'],
+      ['LBORRES','LB · «Result or Finding in Original Units»',3,'Calificador de resultado: es la respuesta a la prueba.'],
+      ['LBORRESU','LB · «Original Units»',3,'Calificador de variable: solo tiene sentido junto a LBORRES.'],
+      ['AEDECOD','AE · «Dictionary-Derived Term»',3,'Calificador sinónimo: otro nombre, ya codificado, para AETERM.'],
+      ['LBCAT','LB · «Category for Lab Test»',3,'Calificador de agrupación: agrupa pruebas, por ejemplo CHEMISTRY.'],
+      ['TESTRL','TE (diseño del ensayo) · «Rule for Start of Element»',4,'Expresa la condición con la que empieza un elemento del ensayo: es una Regla.']
+    ]
+  },
+  nivel1: 'Nivel básico', badge1: 'Básico', nivel2: 'Nivel avanzado', badge2: 'Difícil',
+  intro2: 'Casos prácticos y detalles de la guía. Piensa bien antes de responder.',
+  quiz2: [
+    ['LBORNRLO es un calificador de variable. ¿A qué variable califica?',['LBTESTCD','LBORRES','LBSPEC'],1,'El límite inferior del rango normal solo tiene sentido junto al resultado original, LBORRES.'],
+    ['¿Qué subclase de calificador es AEDECOD?',['De resultado','Sinónimo','De agrupación'],1,'Da un nombre alternativo (el término codificado del diccionario) para AETERM.'],
+    ['¿Cuál de estas variables NO cambia de nombre al pasar del modelo al dominio LB?',['--SEQ','--TESTCD','USUBJID'],2,'USUBJID ya tiene su nombre completo en el modelo; --SEQ y --TESTCD se convierten en LBSEQ y LBTESTCD.'],
+    ['El CRF de signos vitales recoge la posición del paciente (sentado o de pie). Si el modelo VS no tuviera esa variable, ¿qué haría el patrocinador?',['Crear una variable propia, VSPOSIC','Añadir VSPOS, porque --POS es un calificador de la clase Hallazgos','No enviar ese dato'],1,'Se puede añadir cualquier calificador de la misma clase general, y --POS es un calificador de registro de Hallazgos.'],
+    ['Un dominio nuevo de Hallazgos necesita registrar la dosis administrada antes de la prueba. ¿Qué dice 2.6.1?',['Puede añadir --DOSE','No puede tomar calificadores de Intervenciones: ese dato va a otro dominio o a SUPPQUAL','Puede si la renombra'],1,'Tema y calificadores solo pueden venir de la clase del propio dominio.'],
+    ['Al crear un dominio nuevo, ¿cuándo puede el patrocinador elegir su propio código de dos caracteres?',['Siempre que quiera','Solo si CDISC no ha asignado ya uno','Nunca: los asigna la agencia'],1,'Paso 8: primero se busca en la web de CDISC; si no hay código, el patrocinador elige uno único y lo usa en todo el envío.'],
+    ['En la columna «Controlled Terms or Format», ¿qué indica el doble asterisco (**)?',['Que la variable es obligatoria','Que la lista viene de una fuente externa publicada, como MedDRA','Que la lista la define el patrocinador'],1,'Un asterisco: lista definida por el patrocinador. Dos: fuente externa publicada, como MedDRA.'],
+    ['¿Qué etiqueta de dataset sigue el formato del paso 13?',['ae.xpt – eventos adversos','Adverse Events, Events, CDISC SDTM Version 3.1.1, One record per event','AE dataset v3'],1,'El formato es: <nombre del dominio>, <clase>, CDISC SDTM Version <versión>, <estructura>.'],
+    ['Un dato recogido aparece en un dataset de análisis, pero en ningún dataset de tabulación. ¿Es correcto?',['Sí, si se documenta en Define','No: todo dato recogido que esté en análisis debe aparecer también en tabulación','Sí, si va en SUPPQUAL del dataset de análisis'],1,'La sección 2.5 lo exige expresamente.'],
+    ['Antes de V3.x, los resultados de varias pruebas solían ir en una sola fila, una columna por prueba. ¿Cómo se representan en V3.x?',['Igual: una columna por prueba','Como varios registros: una fila por prueba','En SUPPQUAL'],1,'El paradigma V3.x convierte en varios registros lo que antes iba en horizontal en uno solo.']
+  ],
   correcto: 'Correcto. ', incorrecto: 'No es esa. ',
   aciertos: (g,d,n) => 'Aciertos: '+g+' de '+d+(d===n?' · Cuestionario completado':'')
 };
 </script>
-<script src="../recursos/leccion-sdtmig.js?v=5"></script>
+<script src="../recursos/leccion-sdtmig.js?v=6"></script>
 </body>
 </html>
